@@ -1,16 +1,16 @@
 # defines the syntax. This is so that if I decide to change the syntax later, I just have to change it here.
 # Defines the type for each lexeme. You can think of this as defining the vocabulary of the language. 
-# Maybe use enum instead of dictionary?
-
 
 generaltypes = {
     "(" : "leftparenthesis",
     ")" : "rightparenthesis" ,
-    "{" : "leftbrace",
     "}" : "rightbrace",
+
     "," : "comma",
+    "\"": "quote",
     "." : "period",
     "-" : "minus",
+    "+" : "plus",
 
     # TODO I think every line should end in a new line character. semi colons are bloated. Will change this later.
     ";" : "semicolon",
@@ -42,7 +42,8 @@ generaltypes = {
     "print" : "print",
     "return" : "return",
     "var" : "var",
-    "super" : "super"
+    "super" : "super",
+    "newline" : "\\n"
 }
 
     # Returns the type

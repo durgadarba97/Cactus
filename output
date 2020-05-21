@@ -1,0 +1,40 @@
+str v  
+str a  
+str r  
+str x  
+plus +  
+equal =  
+quote "  
+str H  
+str e  
+str l  
+str l  
+str o  
+str W  
+str o  
+str r  
+str l  
+str d  
+quote "  
+semicolon ;  
+None 
+  
+str x  
+equal =  
+int 5  
+semicolon ;  
+None 
+  
+str p  
+str r  
+str i  
+str n  
+str t  
+leftparenthesis (  
+str x  
+rightparenthesis )  
+semicolon ;  
+None 
+  
+EOF eof  
+Success!
