@@ -6,7 +6,7 @@ class Token:
         self.line = linenum
 
     def toString(self):
-        return self.type + " " + self.lexeme + " " + self.literal
+        return self.type + " " + self.lexeme + " " + str(self.literal)
     
     def getLine(self):
         return self.line

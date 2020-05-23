@@ -43,7 +43,7 @@ generaltypes = {
     "return" : "return",
     "var" : "var",
     "super" : "super",
-    "newline" : "\\n"
+    "\n" : "newline"
 }
 
     # Returns the type
