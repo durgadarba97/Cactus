@@ -1,7 +1,11 @@
-var x ! "Hello World";
-x = 0.5 5;
-5
-print(x);
+\comments are ignored
+all comments are multline!\
+
+var x = "Hello World!"
+print(x)
+
+\testing munch\
 orchid
+or chid
 and
 andesite

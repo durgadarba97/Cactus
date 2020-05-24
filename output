@@ -1,33 +1,33 @@
+newline 
+ False
+newline 
+ False
 var var False
-None x False
-not ! False
-string Hello World True
-semicolon ; False
-newline 
- False
-None x False
+identifier x False
 equal = False
-double 0.5 True
-int 5 True
-semicolon ; False
-newline 
- False
-int 5 True
+string Hello World! True
 newline 
  False
 print print False
 leftparenthesis ( False
-None x False
+identifier x False
 rightparenthesis ) False
-semicolon ; False
 newline 
  False
-None orchid False
+newline 
+ False
+newline 
+ False
+identifier orchid False
+newline 
+ False
+or or False
+identifier chid False
 newline 
  False
 and and False
 newline 
  False
-None andesite False
+identifier andesite False
 EOF eof  
 Success!

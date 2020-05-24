@@ -41,19 +41,22 @@ class Scanner:
                         self.throw("open quotation", self.line)
 
                     if(char == "\n"):
-                        line = line + 1
+                        self.line = self.line + 1
                     else:
                         char = char + nextchar
                 self.getNextChar()
                 tokentype = "string"
                 isliteral = True
 
-            # identifies keywords
+            # identifies keywords and idetifiers
             elif(self.isAlpha(char)):
                 while(self.isAlpha(self.peek())):
                     nextchar = self.getNextChar()
                     char = char + nextchar
                 tokentype = getType(char)
+
+                if(tokentype == None):
+                    tokentype = "identifier"
 
             # handles literal ints and doubles. allows trailing and leading periods
             elif(self.isNum(char) or char == "."):
@@ -67,6 +70,21 @@ class Scanner:
                     tokentype = "int"
                 
                 isliteral = True
+
+            # handles comments
+            elif(char == "\\"):
+                while(self.peek() != "\\"):
+                    char = self.getNextChar()
+
+                    # TODO make this more like expected()
+                    if(self.cursor == self.length):
+                        self.line = self.line + 1
+                        self.throw("unclosed comment", self.line)
+
+                    if(char == "\n"):
+                        self.line = self.line + 1
+                self.getNextChar()
+                continue
                 
             else:
                 # handles double lexemes.
@@ -75,7 +93,7 @@ class Scanner:
                         nextchar = self.getNextChar()
                         char = char + nextchar              
                     # TODO This ignores the last character if it's an operator
-
+                
                 elif(char == "\n"):
                     self.line + self.line + 1
                 tokentype = getType(char)

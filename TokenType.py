@@ -51,9 +51,5 @@ generaltypes = {
 def getType(value):
     if(generaltypes.get(value)):
         return generaltypes[value]
-    # elif(ord(value) >= 48 and ord(value) < 58):
-    #     return "int"
-    # elif((ord(value) >= 65 and ord(value) < 91) or (ord(value) >= 97 and ord(value) < 123)):
-    #     return "str"
     else:
-        return "None"
+        return None
