@@ -1,2 +1,28 @@
-ERROR	:	please import 1 file
-Occured at line	:	0
+None v False
+None a False
+None r False
+None x False
+not ! False
+string Hello World True
+semicolon ; False
+newline 
+ False
+None x False
+equal = False
+double 0.5 True
+semicolon ; False
+newline 
+ False
+int 5 True
+newline 
+ False
+None p False
+None r False
+None i False
+None n False
+None t False
+leftparenthesis ( False
+None x False
+rightparenthesis ) False
+EOF eof  
+Success!

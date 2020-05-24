@@ -1,16 +1,18 @@
 from TokenType import getType
 from Token import *
+from Error import *
 
 # this will construct the "sentence". It'll put all the lexemes together in an array list.
+# I use string comparisons, but I should use enums. This will be slow in the future. 
 class Scanner:
-    def __init__(self, raw, e):
+    def __init__(self, raw):
         self.rawtext = raw
         self.tokens = []
         self.cursor = 0
         self.line = 1
         self.start = 0
         self.length = len(self.rawtext)
-        self.error = e
+        self.error = Error()
         self.scan()
 
     # I feel like this should be recursive...
@@ -36,8 +38,7 @@ class Scanner:
                     # TODO make this more like expected()
                     if(self.cursor == self.length):
                         self.line = self.line + 1
-                        print("please close quotes at line :" + str(self.line))
-                        exit(0)
+                        self.throw("open quotation", self.line)
 
                     if(char == "\n"):
                         line = line + 1
@@ -47,6 +48,19 @@ class Scanner:
                 tokentype = "string"
                 isliteral = True
 
+            # handles literal ints and doubles. allows trailing and leading periods
+            elif(self.isNum(char) or char == "."):
+                while(self.isNum(self.peek()) or self.peek() == "."):
+                    nextchar = self.getNextChar()
+                    char = char + nextchar
+
+                if(char.__contains__(".")):
+                    tokentype = "double"
+                else:
+                    tokentype = "int"
+                
+                isliteral = True
+                
             else:
                 # handles double lexemes.
                 if(char == "!" or char == "<" or char == ">" or char == "="):
@@ -81,6 +95,18 @@ class Scanner:
     def getNextChar(self):
         self.cursor = self.cursor + 1
         return self.rawtext[self.cursor - 1]
+
+    def isNum(self, value):
+        if(ord(value) >= 48 and ord(value) < 58):
+            return True
+        else:
+            return False
+
+    def isAlpha(self, value):
+        if((ord(value) >= 65 and ord(value) < 91) or (ord(value) >= 97 and ord(value) < 123)):
+            return True
+        else:
+            return False
 
     def toString(self):
         for i in self.tokens:
