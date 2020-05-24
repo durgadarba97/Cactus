@@ -1,6 +1,4 @@
-None v False
-None a False
-None r False
+var var False
 None x False
 not ! False
 string Hello World True
@@ -10,19 +8,26 @@ newline
 None x False
 equal = False
 double 0.5 True
+int 5 True
 semicolon ; False
 newline 
  False
 int 5 True
 newline 
  False
-None p False
-None r False
-None i False
-None n False
-None t False
+print print False
 leftparenthesis ( False
 None x False
 rightparenthesis ) False
+semicolon ; False
+newline 
+ False
+None orchid False
+newline 
+ False
+and and False
+newline 
+ False
+None andesite False
 EOF eof  
 Success!

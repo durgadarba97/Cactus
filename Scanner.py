@@ -48,6 +48,13 @@ class Scanner:
                 tokentype = "string"
                 isliteral = True
 
+            # identifies keywords
+            elif(self.isAlpha(char)):
+                while(self.isAlpha(self.peek())):
+                    nextchar = self.getNextChar()
+                    char = char + nextchar
+                tokentype = getType(char)
+
             # handles literal ints and doubles. allows trailing and leading periods
             elif(self.isNum(char) or char == "."):
                 while(self.isNum(self.peek()) or self.peek() == "."):
@@ -88,6 +95,7 @@ class Scanner:
             return False
     
     # looks at next char without iterating the cursor
+    # TODO proper end of line return. throws an error if the input file doesn't end with a new line
     def peek(self):
         return self.rawtext[self.cursor]
 

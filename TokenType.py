@@ -5,6 +5,7 @@ generaltypes = {
     "(" : "leftparenthesis",
     ")" : "rightparenthesis" ,
     "}" : "rightbrace",
+    "{" : "leftbrace",
 
     "," : "comma",
     "\"": "quote",
