@@ -7,6 +7,9 @@ class Token:
 
     def toString(self):
         return self.type + " " + self.lexeme + " " + str(self.literal)
+
+    def isLiteral(self):
+        return self.literal
     
     def getLine(self):
         return self.line

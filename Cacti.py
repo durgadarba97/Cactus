@@ -1,6 +1,7 @@
 import sys
 from Scanner import *
 from Error import *
+from AST import test
  
 
 class Cacti:
@@ -16,6 +17,9 @@ class Cacti:
         # else:
         #     self.scan(sys.argv[1])
         self.scan("./thorn.cacti")
+        self.tokens = self.scanner.tokens
+        test(self.scanner)
+
     # Method to import and scan file
     def scan(self, name):
         try:
@@ -26,7 +30,6 @@ class Cacti:
 
         self.text = self.file.read()
         self.scanner = Scanner(self.text)
-        self.scanner.toString()
 
         self.file.close()
         print("Success!")

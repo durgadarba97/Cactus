@@ -1,5 +1,6 @@
 # defines the syntax. This is so that if I decide to change the syntax later, I just have to change it here.
 # Defines the type for each lexeme. You can think of this as defining the vocabulary of the language. 
+# These should be types instead of just strings. 
 
 generaltypes = {
     "(" : "leftparenthesis",

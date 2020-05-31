@@ -1,11 +1,14 @@
 \comments are ignored
-all comments are multline!\
+all comments are multline!
 
 var x = "Hello World!"
 print(x)
 
-\testing munch\
+testing munch
 orchid
 or chid
 and
 andesite
+\
+
+x = 5 + 6
