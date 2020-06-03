@@ -1,7 +1,7 @@
 import sys
 from Scanner import *
 from Error import *
-from AST import test
+from AST import AST
  
 
 class Cacti:
@@ -18,7 +18,9 @@ class Cacti:
         #     self.scan(sys.argv[1])
         self.scan("./thorn.cacti")
         self.tokens = self.scanner.tokens
-        test(self.scanner)
+        self.scanner.toString()
+        print("AST==========>")
+        self.ast = AST(self.tokens)
 
     # Method to import and scan file
     def scan(self, name):

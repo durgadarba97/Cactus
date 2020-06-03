@@ -1,33 +1,14 @@
-newline 
- False
-newline 
- False
-var var False
-identifier x False
-equal = False
-string Hello World! True
-newline 
- False
-print print False
-leftparenthesis ( False
-identifier x False
-rightparenthesis ) False
-newline 
- False
-newline 
- False
-newline 
- False
-identifier orchid False
-newline 
- False
-or or False
-identifier chid False
-newline 
- False
-and and False
-newline 
- False
-identifier andesite False
-EOF eof  
 Success!
+int 5 True
+plus + False
+int 6 True
+plus + False
+int 7 True
+newline 
+ False
+EOF eof  
+AST==========>
+ingetnextchar int
+HERE
+ingetnextchar plus
+skajfkjsflk+

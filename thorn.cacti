@@ -1,3 +1,4 @@
+5 + 6 + 7
 \comments are ignored
 all comments are multline!
 
@@ -10,5 +11,3 @@ or chid
 and
 andesite
 \
-
-x = 5 + 6
