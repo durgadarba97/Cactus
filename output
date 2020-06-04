@@ -9,6 +9,8 @@ newline
 EOF eof  
 AST==========>
 ingetnextchar int
-HERE
 ingetnextchar plus
-skajfkjsflk+
+ingetnextchar int
+ingetnextchar plus
+ingetnextchar int
+ingetnextchar newline

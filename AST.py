@@ -69,7 +69,7 @@ class AST:
     def comparison(self):
         addition = self.addition()
 
-        while(self.match(">" , ">=" , "<" , "<=")):
+        while(self.match("greater" , "greaterequal" , "less" , "lessequal")):
             operator = self.cursor.lexeme
             right = self.addition()
             addition = Binary(addition, operator, right)
@@ -78,18 +78,17 @@ class AST:
 
     def addition(self):
         multi = self.multiplication()
-
-        while(self.match("-", "+")):
+        while(self.match("minus", "plus")):
             operator = self.cursor.lexeme
             right = self.multiplication()
-            print("here")
             multi = Binary(multi, operator, right)
+
         return multi
     
     def multiplication(self):
         un = self.unary()
 
-        while(self.match("/", "*")):
+        while(self.match("slash", "multiply")):
             operator = self.cursor.lexeme
             right = self.unary()
             un = Binary(un, operator, right)
@@ -97,7 +96,7 @@ class AST:
 
     
     def unary(self):
-        if (self.match("!", "-")):            
+        if (self.match("not", "minus")):            
             operator = self.cursor.lexeme          
             right = self.unary()                 
             un = Unary(operator, right)
@@ -111,11 +110,8 @@ class AST:
         #     return Expression.Literal("true")
         # elif(self.match("null")):
         #     return Expression.Literal("null")
-
-        print("HERE")
         
         if(self.match("false", "true", "null", "int", "string")):   
-            print("skajfkjsflk" + self.cursor.lexeme)         
             return Literal(self.cursor.lexeme)
         
         if(self.match("(")):
