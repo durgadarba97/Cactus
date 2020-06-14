@@ -17,6 +17,7 @@ generaltypes = {
     # TODO I think every line should end in a new line character. semi colons are bloated. Will change this later.
     ";" : "semicolon",
     "\\": "slash",
+    "/": "divide",
     "*" : "multiply",
     "=" : "equal",
     "==": "equalequal",

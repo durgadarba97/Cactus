@@ -21,7 +21,7 @@ class Cacti:
         self.scanner.toString()
         print("AST==========>")
         self.ast = AST(self.tokens)
-
+        
     # Method to import and scan file
     def scan(self, name):
         try:

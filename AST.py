@@ -9,17 +9,46 @@ class Expression:
         # an expression can be a literal, unary, binary, or grouping, declaration, 
         pass
 
+    def evaluate(self):
+        pass
+
+    def toString(self):
+        pass
+
 class Literal(Expression):
     def __init__(self, l):
         self.literal = l
 
+    def evaluate(self):
+        return self.literal
+
+    def toString(self):
+        print("Literal(" + self.literal + ")")
+
 class Grouping(Expression):
-    def __init__(self, g, e):
-        self.grouping = "(" + e + ")"
+    def __init__(self, e):
+        self.grouping = e
+    
+    def evaluate(self):
+        return self.grouping.evaluate()
+
+    def toString(self):
+        print("Grouping(\n" + self.grouping + "\n)")
 
 class Unary(Expression):
     def __init__(self, u, e):
-        self.unary = u + e
+        self.unary = u
+        self.expression = e
+
+    def evaluate(self):
+        if(self.unary == "!"):
+            return not self.expression
+        elif(self.unary == "-"):
+            return "-" + self.expression
+        
+
+    def toString(self):
+        print("Unary(" + self.unary + ")")
 
 class Binary(Expression):
     def __init__(self, left, o, right):
@@ -27,18 +56,28 @@ class Binary(Expression):
         self.expRight = right
         self.expLeft = left
 
+    def evaluate(self):
+        print("here:" + self.expRight.toString() + self.expLeft.toString())
+        if(self.operator == "+"):
+            return self.expRight.evaluate() + self.expLeft.evaluate()
+        elif(self.operator == "-"):
+            return self.expRight.evaluate() - self.expLeft.evaluate()
+        elif(self.operator == "/"):
+            return self.expRight.evaluate() / self.expLeft.evaluate()
+        elif(self.operator == "*"):
+            return self.expRight.evaluate() * self.expLeft.evaluate()
+
     def toString(self):
-        print("Binary(\n"+ self.expLeft + self.operator + self.expRight + ")")
+        print("Binary(\n"+ self.expLeft.toString() + self.operator + self.expRight.toString() + "\n)")
 
 class Declaration(Expression):
     def __init__(self, val, n):
         self.value = val
         self.name = n
 
+    def toString(self):
+        print("Declaration( " + self.name + str(self.value) + ")")
 
-def test(scanner):
-    scanner.toString()
-    syntaxtree = AST(scanner.tokens)
 
 
 # Builds the abstract syntax tree using recursive descent.
@@ -49,22 +88,25 @@ class AST:
         self.pos = 0
         self.cursor = None
         self.getNextChar()
-        # TODO build the stack
+
         self.ast = self.expression()
+        self.ast.evaluate()
+        print("after evaluate")
+
 
     # These set of equations build the ast stack. 
     def expression(self):
         return self.equality()
     
     def equality(self):
-        equality = self.comparison()
+        comp = self.comparison()
 
-        while(self.match("!=" , "==")):
+        while(self.match("notequal" , "equalequal")):
             operator = self.cursor.lexeme
             right = self.comparison()
-            equality = Binary(equality, operator, right)
+            comp = Binary(equality, operator, right)
 
-        return equality
+        return comp
 
     def comparison(self):
         addition = self.addition()
@@ -88,10 +130,11 @@ class AST:
     def multiplication(self):
         un = self.unary()
 
-        while(self.match("slash", "multiply")):
+        while(self.match("divide", "multiply")):
             operator = self.cursor.lexeme
             right = self.unary()
             un = Binary(un, operator, right)
+
         return un
 
     
@@ -112,11 +155,17 @@ class AST:
         #     return Expression.Literal("null")
         
         if(self.match("false", "true", "null", "int", "string")):   
-            return Literal(self.cursor.lexeme)
+            lit = Literal(self.cursor.lexeme)
+            return lit
         
-        if(self.match("(")):
+        if(self.match("leftparenthesis")):
             exp = self.expression()
-            # TODO Throw error if parenthesis isn't closed
+
+            # The next token has to be a ). 
+            if(self.cursor.type == "rightparenthesis"):
+                self.getNextChar()
+            else:
+                print("throw error!")
             return Grouping(exp)
         
 
@@ -141,16 +190,9 @@ class AST:
         print("ingetnextchar " + self.cursor.type)
 
     def isAtEnd(self):
-        if(self.tokens[self.pos] == "EOF"):
+        if(self.tokens[self.pos].type == "EOF"):
             return True
         else:
             return False
-
-    def toString(self):
-        for i in self.ast :
-            if(i == None):
-                print("None")
-            else:
-                i.toString()
 
     

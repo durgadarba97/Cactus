@@ -2,8 +2,6 @@ Success!
 int 5 True
 plus + False
 int 6 True
-plus + False
-int 7 True
 newline 
  False
 EOF eof  
@@ -11,6 +9,6 @@ AST==========>
 ingetnextchar int
 ingetnextchar plus
 ingetnextchar int
-ingetnextchar plus
-ingetnextchar int
 ingetnextchar newline
+Literal(
+)
