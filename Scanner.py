@@ -99,11 +99,11 @@ class Scanner:
                 tokentype = getType(char)
 
             if(tokentype == None):
-                break
+                breaks
 
             self.tokens.append(Token(tokentype, char, isliteral, self.line))
 
-        self.tokens.append(Token("EOF", "eof", " ", self.line))
+        self.tokens.append(Token("EOF", "eof", False, self.line))
 
     # Returns true if the next character is equal to the expected character c.
     def expected(self, c):

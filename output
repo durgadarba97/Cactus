@@ -4,11 +4,10 @@ plus + False
 int 6 True
 newline 
  False
-EOF eof  
+EOF eof False
 AST==========>
 ingetnextchar int
 ingetnextchar plus
 ingetnextchar int
 ingetnextchar newline
-Literal(
-)
+Literal(+)

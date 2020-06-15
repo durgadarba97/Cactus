@@ -23,6 +23,8 @@ class Literal(Expression):
         return self.literal
 
     def toString(self):
+        if(self.literal == "\n"):
+            print("this is a newline")
         print("Literal(" + self.literal + ")")
 
 class Grouping(Expression):
@@ -33,7 +35,7 @@ class Grouping(Expression):
         return self.grouping.evaluate()
 
     def toString(self):
-        print("Grouping(\n" + self.grouping + "\n)")
+        print("Grouping(\n" + self.grouping.toString() + "\n)")
 
 class Unary(Expression):
     def __init__(self, u, e):
@@ -48,7 +50,7 @@ class Unary(Expression):
         
 
     def toString(self):
-        print("Unary(" + self.unary + ")")
+        print("Unary(" + self.unary + self.expression.toString() + ")")
 
 class Binary(Expression):
     def __init__(self, left, o, right):
@@ -68,7 +70,10 @@ class Binary(Expression):
             return self.expRight.evaluate() * self.expLeft.evaluate()
 
     def toString(self):
-        print("Binary(\n"+ self.expLeft.toString() + self.operator + self.expRight.toString() + "\n)")
+        if(self.expLeft != None and self.operator != None and self.expRight != None):
+            print("Binary(\n"+ self.expLeft.toString() + self.operator + self.expRight.toString() + "\n)")
+        else:
+            print("HERE")
 
 class Declaration(Expression):
     def __init__(self, val, n):
@@ -87,10 +92,12 @@ class AST:
         self.tokens = t
         self.pos = 0
         self.cursor = None
+
+        # There's an issue with the way things are being parsed. Starts at position 1 instead of 0
         self.getNextChar()
 
         self.ast = self.expression()
-        self.ast.evaluate()
+        self.ast.toString()
         print("after evaluate")
 
 
@@ -104,7 +111,7 @@ class AST:
         while(self.match("notequal" , "equalequal")):
             operator = self.cursor.lexeme
             right = self.comparison()
-            comp = Binary(equality, operator, right)
+            comp = Binary(comp, operator, right)
 
         return comp
 
@@ -142,7 +149,7 @@ class AST:
         if (self.match("not", "minus")):            
             operator = self.cursor.lexeme          
             right = self.unary()                 
-            un = Unary(operator, right)
+            return Unary(operator, right)
 
         return self.primary()
     
@@ -175,6 +182,8 @@ class AST:
     def match(self, *args):
         for types in args:
             if((not self.isAtEnd()) and (self.cursor.type == types)):
+                # The issue is that if we increment the character before we create the object, 
+                # the wrong lexeme will get passed in. In the book, they call the previous, but I chose to do it differently.
                 self.getNextChar()
                 return True
         
@@ -187,7 +196,7 @@ class AST:
     def getNextChar(self):
         self.pos = self.pos + 1
         self.cursor = self.tokens[self.pos - 1]
-        print("ingetnextchar " + self.cursor.type)
+        print("ingetnextchar " + self.cursor.toString())
 
     def isAtEnd(self):
         if(self.tokens[self.pos].type == "EOF"):
