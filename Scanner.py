@@ -99,7 +99,7 @@ class Scanner:
                 tokentype = getType(char)
 
             if(tokentype == None):
-                breaks
+                break
 
             self.tokens.append(Token(tokentype, char, isliteral, self.line))
 

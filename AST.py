@@ -26,6 +26,7 @@ class Literal(Expression):
         if(self.literal == "\n"):
             print("this is a newline")
         print("Literal(" + self.literal + ")")
+        return self.literal
 
 class Grouping(Expression):
     def __init__(self, e):
@@ -44,13 +45,14 @@ class Unary(Expression):
 
     def evaluate(self):
         if(self.unary == "!"):
-            return not self.expression
+            return not self.expression.evaluate()
         elif(self.unary == "-"):
-            return "-" + self.expression
+            return "-" + self.expression.evaluate()
         
 
     def toString(self):
         print("Unary(" + self.unary + self.expression.toString() + ")")
+        return self.unary + self.expression.toString()
 
 class Binary(Expression):
     def __init__(self, left, o, right):
@@ -61,13 +63,13 @@ class Binary(Expression):
     def evaluate(self):
         print("here:" + self.expRight.toString() + self.expLeft.toString())
         if(self.operator == "+"):
-            return self.expRight.evaluate() + self.expLeft.evaluate()
+            return int(self.expLeft.evaluate()) + int(self.expRight.evaluate())
         elif(self.operator == "-"):
-            return self.expRight.evaluate() - self.expLeft.evaluate()
+            return int(self.expLeft.evaluate()) - int(self.expRight.evaluate())
         elif(self.operator == "/"):
-            return self.expRight.evaluate() / self.expLeft.evaluate()
+            return int(self.expLeft.evaluate()) / int(self.expRight.evaluate())
         elif(self.operator == "*"):
-            return self.expRight.evaluate() * self.expLeft.evaluate()
+            return int(self.expLeft.evaluate()) * int(self.expRight.evaluate())
 
     def toString(self):
         if(self.expLeft != None and self.operator != None and self.expRight != None):
@@ -98,7 +100,9 @@ class AST:
 
         self.ast = self.expression()
         self.ast.toString()
-        print("after evaluate")
+        eval = self.ast.evaluate()
+
+        print(eval)
 
 
     # These set of equations build the ast stack. 
@@ -110,6 +114,7 @@ class AST:
 
         while(self.match("notequal" , "equalequal")):
             operator = self.cursor.lexeme
+            self.getNextChar()
             right = self.comparison()
             comp = Binary(comp, operator, right)
 
@@ -120,6 +125,7 @@ class AST:
 
         while(self.match("greater" , "greaterequal" , "less" , "lessequal")):
             operator = self.cursor.lexeme
+            self.getNextChar()
             right = self.addition()
             addition = Binary(addition, operator, right)
         
@@ -129,6 +135,7 @@ class AST:
         multi = self.multiplication()
         while(self.match("minus", "plus")):
             operator = self.cursor.lexeme
+            self.getNextChar()
             right = self.multiplication()
             multi = Binary(multi, operator, right)
 
@@ -139,6 +146,7 @@ class AST:
 
         while(self.match("divide", "multiply")):
             operator = self.cursor.lexeme
+            self.getNextChar()
             right = self.unary()
             un = Binary(un, operator, right)
 
@@ -147,7 +155,10 @@ class AST:
     
     def unary(self):
         if (self.match("not", "minus")):            
-            operator = self.cursor.lexeme          
+            operator = self.cursor.lexeme   
+            self.getNextChar()
+            # This allows things like ---2 to be valid. Change this in the future. 
+            # Leaving this in here because the book does this.    
             right = self.unary()                 
             return Unary(operator, right)
 
@@ -163,6 +174,7 @@ class AST:
         
         if(self.match("false", "true", "null", "int", "string")):   
             lit = Literal(self.cursor.lexeme)
+            self.getNextChar()
             return lit
         
         if(self.match("leftparenthesis")):
@@ -174,9 +186,7 @@ class AST:
             else:
                 print("throw error!")
             return Grouping(exp)
-        
-
-
+                
 
     # Similar to scanner but i think I do this better. 
     def match(self, *args):
@@ -184,7 +194,7 @@ class AST:
             if((not self.isAtEnd()) and (self.cursor.type == types)):
                 # The issue is that if we increment the character before we create the object, 
                 # the wrong lexeme will get passed in. In the book, they call the previous, but I chose to do it differently.
-                self.getNextChar()
+                # self.getNextChar()
                 return True
         
         return False
@@ -203,5 +213,8 @@ class AST:
             return True
         else:
             return False
+
+    def toString(self):
+        self.ast.toString()
 
     
