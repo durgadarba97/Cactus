@@ -37,6 +37,7 @@ class Grouping(Expression):
 
     def toString(self):
         print("Grouping(\n" + self.grouping.toString() + "\n)")
+        return self.grouping.toString()
 
 class Unary(Expression):
     def __init__(self, u, e):
@@ -47,7 +48,7 @@ class Unary(Expression):
         if(self.unary == "!"):
             return not self.expression.evaluate()
         elif(self.unary == "-"):
-            return "-" + self.expression.evaluate()
+            return "-" + self.expression.evaluate() 
         
 
     def toString(self):
@@ -88,6 +89,7 @@ class Declaration(Expression):
 
 
 # Builds the abstract syntax tree using recursive descent.
+# TODO newline characters break the code.
 class AST:
 
     def __init__(self, t):
@@ -178,6 +180,7 @@ class AST:
             return lit
         
         if(self.match("leftparenthesis")):
+            self.getNextChar()
             exp = self.expression()
 
             # The next token has to be a ). 
@@ -186,6 +189,7 @@ class AST:
             else:
                 print("throw error!")
             return Grouping(exp)
+        
                 
 
     # Similar to scanner but i think I do this better. 

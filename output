@@ -2,12 +2,18 @@ Success!
 int 5 True
 plus + False
 int 6 True
+plus + False
+leftparenthesis ( False
+int 1 True
+plus + False
+int 1 True
+rightparenthesis ) False
 newline 
  False
 EOF eof False
 AST==========>
-ingetnextchar int
-ingetnextchar plus
-ingetnextchar int
-ingetnextchar newline
-Literal(+)
+ingetnextchar int 5 True
+ingetnextchar plus + False
+ingetnextchar int 6 True
+ingetnextchar plus + False
+ingetnextchar leftparenthesis ( False
