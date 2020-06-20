@@ -62,7 +62,6 @@ class Binary(Expression):
         self.expLeft = left
 
     def evaluate(self):
-        print("here:" + self.expRight.toString() + self.expLeft.toString())
         if(self.operator == "+"):
             return int(self.expLeft.evaluate()) + int(self.expRight.evaluate())
         elif(self.operator == "-"):
@@ -71,6 +70,21 @@ class Binary(Expression):
             return int(self.expLeft.evaluate()) / int(self.expRight.evaluate())
         elif(self.operator == "*"):
             return int(self.expLeft.evaluate()) * int(self.expRight.evaluate())
+        
+        # Evaluate comparisons
+        elif(self.operator == "<"):
+            return (self.expLeft.evaluate() < self.expRight.evaluate())
+        elif(self.operator == ">"):
+            return (self.expLeft.evaluate() > self.expRight.evaluate())
+        elif(self.operator == "<="):
+            return (self.expLeft.evaluate() <= self.expRight.evaluate())
+        elif(self.operator == ">="):
+            return (self.expLeft.evaluate() >= self.expRight.evaluate())
+        elif(self.operator == "=="):
+            return (self.expLeft.evaluate() == self.expRight.evaluate())
+        elif(self.operator == "!="):
+            return (self.expLeft.evaluate() != self.expRight.evaluate())
+        
 
     def toString(self):
         if(self.expLeft != None and self.operator != None and self.expRight != None):
@@ -101,10 +115,12 @@ class AST:
         self.getNextChar()
 
         self.ast = self.expression()
-        self.ast.toString()
         eval = self.ast.evaluate()
 
-        print(eval)
+        # To String is broken for some reason. 
+        # self.ast.toString()
+
+        print("Result:\t" + str(eval))
 
 
     # These set of equations build the ast stack. 
