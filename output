@@ -1,19 +1,48 @@
 Success!
-int 5 True
+int 10 True
 plus + False
 int 6 True
+newline 
+ False
+newline 
+ False
+newline 
+ False
+int 5 True
 plus + False
-leftparenthesis ( False
-int 1 True
-plus + False
-int 1 True
-rightparenthesis ) False
+int 2 True
+newline 
+ False
 newline 
  False
 EOF eof False
 AST==========>
-ingetnextchar int 5 True
+ingetnextchar int 10 True
 ingetnextchar plus + False
 ingetnextchar int 6 True
+ingetnextchar newline 
+ False
+ingetnextchar newline 
+ False
+CURSOR	
+
+ingetnextchar newline 
+ False
+CURSOR	
+
+ingetnextchar int 5 True
+CURSOR	5
+Expected end of line
 ingetnextchar plus + False
-ingetnextchar leftparenthesis ( False
+ingetnextchar int 2 True
+ingetnextchar newline 
+ False
+ingetnextchar newline 
+ False
+CURSOR	
+
+ingetnextchar EOF eof False
+CURSOR	eof
+Expected end of line
+Result:	16
+Result:	7

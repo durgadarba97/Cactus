@@ -113,15 +113,35 @@ class AST:
 
         # There's an issue with the way things are being parsed. Starts at position 1 instead of 0
         self.getNextChar()
-
-        self.ast = self.expression()
-        eval = self.ast.evaluate()
+        self.ast = []
+        self.program()
+        # self.expression()
+        
+        for i in self.ast:
+            eval = i.evaluate()
+            print("Result:\t" + str(eval))
 
         # To String is broken for some reason. 
         # self.ast.toString()
 
-        print("Result:\t" + str(eval))
 
+    def program(self):
+        while(not self.isAtEnd()):
+            stmt = self.statement()
+
+            # handles multiple newline characters at a time. 
+            if(stmt is not None):
+                self.ast.append(stmt)
+            self.getNextChar()
+            print("CURSOR\t"+ self.cursor.lexeme)
+
+            if(not self.match("newline")):
+                print("Expected end of line")
+                
+        
+
+    def statement(self):
+        return self.expression()
 
     # These set of equations build the ast stack. 
     def expression(self):
@@ -229,7 +249,7 @@ class AST:
         print("ingetnextchar " + self.cursor.toString())
 
     def isAtEnd(self):
-        if(self.tokens[self.pos].type == "EOF"):
+        if(self.cursor.type == "EOF"):
             return True
         else:
             return False
