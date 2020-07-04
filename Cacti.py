@@ -19,7 +19,7 @@ class Cacti:
         self.scan("./thorn.cacti")
         self.tokens = self.scanner.tokens
         self.scanner.toString()
-        print("AST==========>")
+        print("AST Construction==========>")
         self.ast = AST(self.tokens)
         
     # Method to import and scan file

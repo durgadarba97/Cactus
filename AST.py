@@ -7,11 +7,15 @@ from TokenType import getType
 class Expression:
     def __init__(self):
         # an expression can be a literal, unary, binary, or grouping, declaration, 
-        pass
+        # map that defines the variables.
+        self.environment = {}
 
+    def define(self, name, value):
+        self.environment[name] = value
+    
     def evaluate(self):
-        pass
-
+        return self.environment[name]
+        
     def toString(self):
         pass
 
@@ -93,12 +97,29 @@ class Binary(Expression):
             print("HERE")
 
 class Declaration(Expression):
-    def __init__(self, val, n):
+    def __init__(self, n, val):
         self.value = val
         self.name = n
+        self.define(self.name, self.value)
+    
+    def define(self, n, v):
+        pass
+
+    def evaluate(self):
+        pass
 
     def toString(self):
         print("Declaration( " + self.name + str(self.value) + ")")
+
+class Print(Expression):
+    def __init__(self, e):
+        self.value = e
+    
+    def evaluate(self):
+        print(self.value.evaluate())
+    
+    def toString(self):
+        print("Print(" + self.value.toString() + ")")
 
 
 
@@ -115,33 +136,59 @@ class AST:
         self.getNextChar()
         self.ast = []
         self.program()
-        # self.expression()
         
+        # evaluates the AST
+        print("\nAST result==========>")
         for i in self.ast:
             eval = i.evaluate()
-            print("Result:\t" + str(eval))
 
         # To String is broken for some reason. 
         # self.ast.toString()
 
-
+    # program = statement + end of line character + end of file
     def program(self):
         while(not self.isAtEnd()):
-            stmt = self.statement()
+            # a line can either be a variable declaration or a statement.
+            if(self.match("identifier")):
+                stmt = self.declaration()
+            else:
+                stmt = self.statement()
 
             # handles multiple newline characters at a time. 
             if(stmt is not None):
                 self.ast.append(stmt)
             self.getNextChar()
-            print("CURSOR\t"+ self.cursor.lexeme)
 
-            if(not self.match("newline")):
+            # this is a weird design thing.
+            #  We shouldn't have to check if it's end life bc the while loops does that.
+            # this solves the issue of throwing errors bc EOF cant end in new line.
+            # TODO
+            if(not self.match("newline") and not self.isAtEnd()):
                 print("Expected end of line")
-                
-        
 
+    def declaration(self):
+        x = 10
+        x + 5
+        varname = self.cursor.lexeme
+        self.getNextChar()
+        if(self.match("equal")):
+            self.getNextChar()
+            return Declaration(varname, self.expression())
+        # if(self.match("equal")):
+            
+        # else:
+        #     print("expecting \"=\" in variable declaration")
+
+
+        
+    # A single line is either a print statement or an expression.
+    # This will change when we add variables
     def statement(self):
-        return self.expression()
+        if(self.match("print")):
+            self.getNextChar()
+            return Print(self.primary())
+        else:
+            return self.expression()
 
     # These set of equations build the ast stack. 
     def expression(self):
@@ -225,6 +272,10 @@ class AST:
             else:
                 print("throw error!")
             return Grouping(exp)
+
+        if(self.match("identifier")):
+            return Declaration()
+
         
                 
 

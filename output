@@ -1,9 +1,23 @@
 Success!
+newline 
+ False
+print print False
+string Welcome to Cacti! True
+newline 
+ False
+identifier x False
+equal = False
 int 10 True
 plus + False
 int 6 True
 newline 
  False
+newline 
+ False
+print print False
+leftparenthesis ( False
+identifier x False
+rightparenthesis ) False
 newline 
  False
 newline 
@@ -13,10 +27,18 @@ plus + False
 int 2 True
 newline 
  False
-newline 
- False
 EOF eof False
-AST==========>
+AST Construction==========>
+ingetnextchar newline 
+ False
+ingetnextchar print print False
+Expected end of line
+ingetnextchar string Welcome to Cacti! True
+ingetnextchar newline 
+ False
+ingetnextchar identifier x False
+Expected end of line
+ingetnextchar equal = False
 ingetnextchar int 10 True
 ingetnextchar plus + False
 ingetnextchar int 6 True
@@ -24,25 +46,7 @@ ingetnextchar newline
  False
 ingetnextchar newline 
  False
-CURSOR	
-
-ingetnextchar newline 
- False
-CURSOR	
-
-ingetnextchar int 5 True
-CURSOR	5
+ingetnextchar print print False
 Expected end of line
-ingetnextchar plus + False
-ingetnextchar int 2 True
-ingetnextchar newline 
- False
-ingetnextchar newline 
- False
-CURSOR	
-
-ingetnextchar EOF eof False
-CURSOR	eof
-Expected end of line
-Result:	16
-Result:	7
+ingetnextchar leftparenthesis ( False
+ingetnextchar identifier x False
