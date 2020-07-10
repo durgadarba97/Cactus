@@ -10,6 +10,10 @@ equal = False
 int 10 True
 plus + False
 int 6 True
+multiply * False
+int 10 True
+plus + False
+int 50 True
 newline 
  False
 newline 
@@ -22,31 +26,43 @@ newline
  False
 newline 
  False
-int 5 True
-plus + False
-int 2 True
-newline 
- False
 EOF eof False
 AST Construction==========>
 ingetnextchar newline 
  False
 ingetnextchar print print False
-Expected end of line
 ingetnextchar string Welcome to Cacti! True
 ingetnextchar newline 
  False
+HERE==============
 ingetnextchar identifier x False
-Expected end of line
 ingetnextchar equal = False
 ingetnextchar int 10 True
 ingetnextchar plus + False
 ingetnextchar int 6 True
+ingetnextchar multiply * False
+ingetnextchar int 10 True
+ingetnextchar plus + False
+ingetnextchar int 50 True
 ingetnextchar newline 
  False
+HERE==============
 ingetnextchar newline 
  False
+HERE==============
 ingetnextchar print print False
-Expected end of line
 ingetnextchar leftparenthesis ( False
 ingetnextchar identifier x False
+ingetnextchar rightparenthesis ) False
+ingetnextchar newline 
+ False
+HERE==============
+ingetnextchar newline 
+ False
+HERE==============
+ingetnextchar EOF eof False
+HERE==============
+
+AST result==========>
+Welcome to Cacti!
+120

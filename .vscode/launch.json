@@ -5,7 +5,7 @@
             "name": "Python: Debug Current File",
             "type": "python",
             "request": "launch",
-            "program": "/Users/durga/src/pythonprojects/Cacti/Cacti.py",
+            "program": "./Cacti.py",
             "console": "integratedTerminal",
             "stopOnEntry": true,
             "justMyCode": false

@@ -3,125 +3,9 @@
 # These objects serve as nodes in this. 
 
 from TokenType import getType
-
-class Expression:
-    def __init__(self):
-        # an expression can be a literal, unary, binary, or grouping, declaration, 
-        # map that defines the variables.
-        self.environment = {}
-
-    def define(self, name, value):
-        self.environment[name] = value
-    
-    def evaluate(self):
-        return self.environment[name]
-        
-    def toString(self):
-        pass
-
-class Literal(Expression):
-    def __init__(self, l):
-        self.literal = l
-
-    def evaluate(self):
-        return self.literal
-
-    def toString(self):
-        if(self.literal == "\n"):
-            print("this is a newline")
-        print("Literal(" + self.literal + ")")
-        return self.literal
-
-class Grouping(Expression):
-    def __init__(self, e):
-        self.grouping = e
-    
-    def evaluate(self):
-        return self.grouping.evaluate()
-
-    def toString(self):
-        print("Grouping(\n" + self.grouping.toString() + "\n)")
-        return self.grouping.toString()
-
-class Unary(Expression):
-    def __init__(self, u, e):
-        self.unary = u
-        self.expression = e
-
-    def evaluate(self):
-        if(self.unary == "!"):
-            return not self.expression.evaluate()
-        elif(self.unary == "-"):
-            return "-" + self.expression.evaluate() 
-        
-
-    def toString(self):
-        print("Unary(" + self.unary + self.expression.toString() + ")")
-        return self.unary + self.expression.toString()
-
-class Binary(Expression):
-    def __init__(self, left, o, right):
-        self.operator = o
-        self.expRight = right
-        self.expLeft = left
-
-    def evaluate(self):
-        if(self.operator == "+"):
-            return int(self.expLeft.evaluate()) + int(self.expRight.evaluate())
-        elif(self.operator == "-"):
-            return int(self.expLeft.evaluate()) - int(self.expRight.evaluate())
-        elif(self.operator == "/"):
-            return int(self.expLeft.evaluate()) / int(self.expRight.evaluate())
-        elif(self.operator == "*"):
-            return int(self.expLeft.evaluate()) * int(self.expRight.evaluate())
-        
-        # Evaluate comparisons
-        elif(self.operator == "<"):
-            return (self.expLeft.evaluate() < self.expRight.evaluate())
-        elif(self.operator == ">"):
-            return (self.expLeft.evaluate() > self.expRight.evaluate())
-        elif(self.operator == "<="):
-            return (self.expLeft.evaluate() <= self.expRight.evaluate())
-        elif(self.operator == ">="):
-            return (self.expLeft.evaluate() >= self.expRight.evaluate())
-        elif(self.operator == "=="):
-            return (self.expLeft.evaluate() == self.expRight.evaluate())
-        elif(self.operator == "!="):
-            return (self.expLeft.evaluate() != self.expRight.evaluate())
-        
-
-    def toString(self):
-        if(self.expLeft != None and self.operator != None and self.expRight != None):
-            print("Binary(\n"+ self.expLeft.toString() + self.operator + self.expRight.toString() + "\n)")
-        else:
-            print("HERE")
-
-class Declaration(Expression):
-    def __init__(self, n, val):
-        self.value = val
-        self.name = n
-        self.define(self.name, self.value)
-    
-    def define(self, n, v):
-        pass
-
-    def evaluate(self):
-        pass
-
-    def toString(self):
-        print("Declaration( " + self.name + str(self.value) + ")")
-
-class Print(Expression):
-    def __init__(self, e):
-        self.value = e
-    
-    def evaluate(self):
-        print(self.value.evaluate())
-    
-    def toString(self):
-        print("Print(" + self.value.toString() + ")")
-
-
+from Expression import *
+from Statement import *
+from Environment import *
 
 # Builds the abstract syntax tree using recursive descent.
 # TODO newline characters break the code.
@@ -131,6 +15,7 @@ class AST:
         self.tokens = t
         self.pos = 0
         self.cursor = None
+        self.state = State()
 
         # There's an issue with the way things are being parsed. Starts at position 1 instead of 0
         self.getNextChar()
@@ -149,6 +34,8 @@ class AST:
     def program(self):
         while(not self.isAtEnd()):
             # a line can either be a variable declaration or a statement.
+            self.getNextChar()
+
             if(self.match("identifier")):
                 stmt = self.declaration()
             else:
@@ -157,28 +44,24 @@ class AST:
             # handles multiple newline characters at a time. 
             if(stmt is not None):
                 self.ast.append(stmt)
-            self.getNextChar()
+            
+            print("HERE==============")
 
             # this is a weird design thing.
             #  We shouldn't have to check if it's end life bc the while loops does that.
             # this solves the issue of throwing errors bc EOF cant end in new line.
             # TODO
             if(not self.match("newline") and not self.isAtEnd()):
-                print("Expected end of line")
+                print("Error:\tExpected end of line")
 
     def declaration(self):
-        x = 10
-        x + 5
         varname = self.cursor.lexeme
         self.getNextChar()
         if(self.match("equal")):
             self.getNextChar()
-            return Declaration(varname, self.expression())
-        # if(self.match("equal")):
-            
-        # else:
-        #     print("expecting \"=\" in variable declaration")
+            d = Declaration(self.state, varname, self.expression())
 
+            return d
 
         
     # A single line is either a print statement or an expression.
@@ -186,8 +69,9 @@ class AST:
     def statement(self):
         if(self.match("print")):
             self.getNextChar()
-            return Print(self.primary())
+            return Print(self.expression())
         else:
+            # self.getNextChar()
             return self.expression()
 
     # These set of equations build the ast stack. 
@@ -270,11 +154,13 @@ class AST:
             if(self.cursor.type == "rightparenthesis"):
                 self.getNextChar()
             else:
-                print("throw error!")
+                print("Error:\topen parathensis error!")
             return Grouping(exp)
 
         if(self.match("identifier")):
-            return Declaration()
+            var = self.cursor.lexeme
+            self.getNextChar()
+            return Variable(self.state, var)
 
         
                 

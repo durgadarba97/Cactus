@@ -1,0 +1,90 @@
+from Environment import *
+class Expression():
+    def __init__(self):
+        # an expression can be a literal, unary, binary, or grouping, declaration, 
+        # map that defines the variables.
+        pass
+
+class Literal(Expression):
+    def __init__(self, l):
+        self.literal = l
+
+    def evaluate(self):
+        return self.literal
+
+    def toString(self):
+        if(self.literal == "\n"):
+            print("this is a newline")
+        print("Literal(" + self.literal + ")")
+        return self.literal
+
+class Grouping(Expression):
+    def __init__(self, e):
+        self.grouping = e
+    
+    def evaluate(self):
+        return self.grouping.evaluate()
+
+    def toString(self):
+        print("Grouping(\n" + self.grouping.toString() + "\n)")
+        return self.grouping.toString()
+
+class Unary(Expression):
+    def __init__(self, u, e):
+        self.unary = u
+        self.expression = e
+
+    def evaluate(self):
+        if(self.unary == "!"):
+            return not self.expression.evaluate()
+        elif(self.unary == "-"):
+            return "-" + self.expression.evaluate() 
+        
+
+    def toString(self):
+        print("Unary(" + self.unary + self.expression.toString() + ")")
+        return self.unary + self.expression.toString()
+
+class Binary(Expression):
+    def __init__(self, left, o, right):
+        self.operator = o
+        self.expRight = right
+        self.expLeft = left
+
+    def evaluate(self):
+        if(self.operator == "+"):
+            return int(self.expLeft.evaluate()) + int(self.expRight.evaluate())
+        elif(self.operator == "-"):
+            return int(self.expLeft.evaluate()) - int(self.expRight.evaluate())
+        elif(self.operator == "/"):
+            return int(self.expLeft.evaluate()) / int(self.expRight.evaluate())
+        elif(self.operator == "*"):
+            return int(self.expLeft.evaluate()) * int(self.expRight.evaluate())
+        
+        # Evaluate comparisons
+        elif(self.operator == "<"):
+            return (self.expLeft.evaluate() < self.expRight.evaluate())
+        elif(self.operator == ">"):
+            return (self.expLeft.evaluate() > self.expRight.evaluate())
+        elif(self.operator == "<="):
+            return (self.expLeft.evaluate() <= self.expRight.evaluate())
+        elif(self.operator == ">="):
+            return (self.expLeft.evaluate() >= self.expRight.evaluate())
+        elif(self.operator == "=="):
+            return (self.expLeft.evaluate() == self.expRight.evaluate())
+        elif(self.operator == "!="):
+            return (self.expLeft.evaluate() != self.expRight.evaluate())        
+
+    def toString(self):
+        if(self.expLeft != None and self.operator != None and self.expRight != None):
+            print("Binary(\n"+ self.expLeft.toString() + self.operator + self.expRight.toString() + "\n)")
+        else:
+            print("HERE")
+
+class Variable(Expression):
+    def __init__(self, s, n):
+        self.name = n
+        self.state = s
+    
+    def evaluate(self):
+        return self.state.getEnv(self.name).evaluate()

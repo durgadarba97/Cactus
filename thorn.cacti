@@ -1,10 +1,9 @@
 \Welcome to Cacti\
 print "Welcome to Cacti!"
-x = 10 + 6
+x = 10 + 6 * 10 + 50
 
 print(x)
 
-5 + 2
 \comments are ignored
 all comments are multline!
 
