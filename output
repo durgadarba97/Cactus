@@ -2,26 +2,128 @@ Success!
 newline 
  False
 print print False
-string Welcome to Cacti! True
+leftparenthesis ( False
+identifier whoami False
+rightparenthesis ) False
 newline 
  False
-identifier x False
+newline 
+ False
+if if False
+leftparenthesis ( False
+string hello True
+equalequal == False
+string nothello True
+rightparenthesis ) False
+leftbrace { False
+newline 
+ False
+print print False
+leftparenthesis ( False
+string here True
+rightparenthesis ) False
+newline 
+ False
+rightbrace } False
+else else False
+leftbrace { False
+newline 
+ False
+print print False
+string not here True
+newline 
+ False
+rightbrace } False
+newline 
+ False
+newline 
+ False
+identifier a False
 equal = False
-int 10 True
-plus + False
-int 6 True
-multiply * False
-int 10 True
-plus + False
-int 50 True
+string outer scope True
+newline 
+ False
+identifier b False
+equal = False
+string global b True
+newline 
+ False
+print print False
+identifier a False
+newline 
+ False
+leftbrace { False
+newline 
+ False
+newline 
+ False
+identifier b False
+equal = False
+string inner scope True
+newline 
+ False
+identifier c False
+equal = False
+string inner scope 2 True
+newline 
+ False
+print print False
+leftparenthesis ( False
+string should be outer scope True
+rightparenthesis ) False
+newline 
+ False
+print print False
+leftparenthesis ( False
+identifier a False
+rightparenthesis ) False
+newline 
+ False
+print print False
+leftparenthesis ( False
+string should be inner scope True
+rightparenthesis ) False
+newline 
+ False
+print print False
+leftparenthesis ( False
+identifier b False
+rightparenthesis ) False
+newline 
+ False
+print print False
+leftparenthesis ( False
+string should be inner scope 2 True
+rightparenthesis ) False
+newline 
+ False
+print print False
+leftparenthesis ( False
+identifier c False
+rightparenthesis ) False
+newline 
+ False
+rightbrace } False
+newline 
+ False
 newline 
  False
 newline 
  False
 print print False
 leftparenthesis ( False
-identifier x False
+identifier b False
 rightparenthesis ) False
+newline 
+ False
+newline 
+ False
+newline 
+ False
+newline 
+ False
+newline 
+ False
 newline 
  False
 newline 
@@ -31,38 +133,148 @@ AST Construction==========>
 ingetnextchar newline 
  False
 ingetnextchar print print False
-ingetnextchar string Welcome to Cacti! True
-ingetnextchar newline 
- False
-HERE==============
-ingetnextchar identifier x False
-ingetnextchar equal = False
-ingetnextchar int 10 True
-ingetnextchar plus + False
-ingetnextchar int 6 True
-ingetnextchar multiply * False
-ingetnextchar int 10 True
-ingetnextchar plus + False
-ingetnextchar int 50 True
-ingetnextchar newline 
- False
-HERE==============
-ingetnextchar newline 
- False
-HERE==============
-ingetnextchar print print False
 ingetnextchar leftparenthesis ( False
-ingetnextchar identifier x False
+ingetnextchar identifier whoami False
 ingetnextchar rightparenthesis ) False
 ingetnextchar newline 
  False
-HERE==============
 ingetnextchar newline 
  False
-HERE==============
+ingetnextchar if if False
+ingetnextchar leftparenthesis ( False
+ingetnextchar string hello True
+ingetnextchar equalequal == False
+ingetnextchar string nothello True
+ingetnextchar rightparenthesis ) False
+ingetnextchar leftbrace { False
+unclosed parenthesis
+ingetnextchar newline 
+ False
+ingetnextchar print print False
+ingetnextchar leftparenthesis ( False
+ingetnextchar string here True
+ingetnextchar rightparenthesis ) False
+ingetnextchar newline 
+ False
+ingetnextchar rightbrace } False
+Error:	Expected end of line
+ingetnextchar else else False
+ingetnextchar leftbrace { False
+ingetnextchar newline 
+ False
+ingetnextchar print print False
+ingetnextchar string not here True
+ingetnextchar newline 
+ False
+ingetnextchar rightbrace } False
+Error:	Expected end of line
+Error:	Expected end of line
+ingetnextchar newline 
+ False
+ingetnextchar newline 
+ False
+ingetnextchar identifier a False
+ingetnextchar equal = False
+ingetnextchar string outer scope True
+ingetnextchar newline 
+ False
+ingetnextchar identifier b False
+ingetnextchar equal = False
+ingetnextchar string global b True
+ingetnextchar newline 
+ False
+ingetnextchar print print False
+ingetnextchar identifier a False
+ingetnextchar newline 
+ False
+ingetnextchar leftbrace { False
+ingetnextchar newline 
+ False
+ingetnextchar newline 
+ False
+ingetnextchar identifier b False
+ingetnextchar equal = False
+ingetnextchar string inner scope True
+ingetnextchar newline 
+ False
+ingetnextchar identifier c False
+ingetnextchar equal = False
+ingetnextchar string inner scope 2 True
+ingetnextchar newline 
+ False
+ingetnextchar print print False
+ingetnextchar leftparenthesis ( False
+ingetnextchar string should be outer scope True
+ingetnextchar rightparenthesis ) False
+ingetnextchar newline 
+ False
+ingetnextchar print print False
+ingetnextchar leftparenthesis ( False
+ingetnextchar identifier a False
+ingetnextchar rightparenthesis ) False
+ingetnextchar newline 
+ False
+ingetnextchar print print False
+ingetnextchar leftparenthesis ( False
+ingetnextchar string should be inner scope True
+ingetnextchar rightparenthesis ) False
+ingetnextchar newline 
+ False
+ingetnextchar print print False
+ingetnextchar leftparenthesis ( False
+ingetnextchar identifier b False
+ingetnextchar rightparenthesis ) False
+ingetnextchar newline 
+ False
+ingetnextchar print print False
+ingetnextchar leftparenthesis ( False
+ingetnextchar string should be inner scope 2 True
+ingetnextchar rightparenthesis ) False
+ingetnextchar newline 
+ False
+ingetnextchar print print False
+ingetnextchar leftparenthesis ( False
+ingetnextchar identifier c False
+ingetnextchar rightparenthesis ) False
+ingetnextchar newline 
+ False
+ingetnextchar rightbrace } False
+Error:	Expected end of line
+Error:	Expected end of line
+ingetnextchar newline 
+ False
+ingetnextchar newline 
+ False
+ingetnextchar newline 
+ False
+ingetnextchar print print False
+ingetnextchar leftparenthesis ( False
+ingetnextchar identifier b False
+ingetnextchar rightparenthesis ) False
+ingetnextchar newline 
+ False
+ingetnextchar newline 
+ False
+ingetnextchar newline 
+ False
+ingetnextchar newline 
+ False
+ingetnextchar newline 
+ False
+ingetnextchar newline 
+ False
+ingetnextchar newline 
+ False
 ingetnextchar EOF eof False
-HERE==============
 
 AST result==========>
-Welcome to Cacti!
-120
+Hello, welcome to Cactus!
+not here
+outer scope
+should be outer scope
+outer scope
+should be inner scope
+inner scope
+should be inner scope 2
+inner scope 2
+inner scope

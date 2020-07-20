@@ -15,11 +15,14 @@ class AST:
         self.tokens = t
         self.pos = 0
         self.cursor = None
-        self.state = State()
-
+        self.environment = Environment()
+        
         # There's an issue with the way things are being parsed. Starts at position 1 instead of 0
         self.getNextChar()
         self.ast = []
+
+        self.ast.append(Declaration(self.environment, "whoami", Literal("Hello, welcome to Cactus!")))
+
         self.program()
         
         # evaluates the AST
@@ -36,32 +39,60 @@ class AST:
             # a line can either be a variable declaration or a statement.
             self.getNextChar()
 
-            if(self.match("identifier")):
-                stmt = self.declaration()
-            else:
-                stmt = self.statement()
+            stmt = self.line()
 
             # handles multiple newline characters at a time. 
             if(stmt is not None):
                 self.ast.append(stmt)
-            
-            print("HERE==============")
 
             # this is a weird design thing.
-            #  We shouldn't have to check if it's end life bc the while loops does that.
+            #  We shouldn't have to check if it's end of file bc the while loops does that.
             # this solves the issue of throwing errors bc EOF cant end in new line.
             # TODO
             if(not self.match("newline") and not self.isAtEnd()):
                 print("Error:\tExpected end of line")
+
+    def line(self):
+        if(self.match("identifier")):
+            stmt = self.declaration() 
+        elif(self.match("leftbrace")):
+            stmt = self.block()
+        elif(self.match("if")):
+            stmt = self.ifStatement()
+        else:
+            stmt = self.statement()
+        return stmt
+
+    # Handles { } TODO better orgranize this. this is exactly like program()
+    def block(self):
+        blockstmts = []
+
+        # Creates variable scope by saying that the block is the child of the parent block. 
+        childenvironment = Environment(self.environment)
+        self.environment = childenvironment
+        while(not self.isAtEnd() and not self.match("rightbrace")):
+
+            self.getNextChar()
+            stmt = self.line()
+
+            # handles multiple newline characters at a time. 
+            if(stmt is not None):
+                blockstmts.append(stmt)
+
+            if(not self.match("newline") and not self.isAtEnd()):
+                print("Error:\tExpected end of line")
+        
+        # resets variable scope to the parent.
+        self.environment = childenvironment.enclosing
+        return Block(blockstmts) 
 
     def declaration(self):
         varname = self.cursor.lexeme
         self.getNextChar()
         if(self.match("equal")):
             self.getNextChar()
-            d = Declaration(self.state, varname, self.expression())
+            return Declaration(self.environment, varname, self.expression())
 
-            return d
 
         
     # A single line is either a print statement or an expression.
@@ -73,6 +104,30 @@ class AST:
         else:
             # self.getNextChar()
             return self.expression()
+
+    def ifStatement(self):
+        self.getNextChar()
+        
+        # maybe we can just call primary()
+        if(self.match("leftparenthesis")):
+            self.getNextChar()
+            condition = self.expression()
+
+            self.getNextChar()
+            if(not self.match("rightparenthesis")):
+                print("unclosed parenthesis")
+
+            thenbranch = self.line()
+            self.getNextChar()
+            elsebranch = None
+            if(self.match("else")):
+                self.getNextChar()
+                elsebranch = self.line()
+
+            return IfStatement(condition, thenbranch, elsebranch)
+        
+        else:
+            print("if statement must start a condition using left parenthesis")
 
     # These set of equations build the ast stack. 
     def expression(self):
@@ -134,13 +189,6 @@ class AST:
         return self.primary()
     
     def primary(self):
-        # if(self.match("false")):
-        #     return Expression.Literal("false")
-        # elif(self.match("true")):
-        #     return Expression.Literal("true")
-        # elif(self.match("null")):
-        #     return Expression.Literal("null")
-        
         if(self.match("false", "true", "null", "int", "string")):   
             lit = Literal(self.cursor.lexeme)
             self.getNextChar()
@@ -160,7 +208,7 @@ class AST:
         if(self.match("identifier")):
             var = self.cursor.lexeme
             self.getNextChar()
-            return Variable(self.state, var)
+            return Variable(self.environment, var)
 
         
                 

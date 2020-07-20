@@ -24,3 +24,24 @@ class Print(Statement):
     
     def toString(self):
         print("Print(" + self.value.toString() + ")")
+
+class Block(Statement):
+    def __init__(self, s):
+        self.statements = s
+    
+    def evaluate(self):
+        for i in self.statements:
+            i.evaluate()
+        
+
+class IfStatement(Statement):
+    def __init__(self, cond, th, el = None):
+        self.condition = cond
+        self.thenbranch = th
+        self.elsebranch = el
+        
+    def evaluate(self):
+        if(self.condition.evaluate()):
+            self.thenbranch.evaluate()
+        elif(self.elsebranch != None):
+            self.elsebranch.evaluate()

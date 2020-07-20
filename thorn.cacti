@@ -1,8 +1,34 @@
 \Welcome to Cacti\
-print "Welcome to Cacti!"
-x = 10 + 6 * 10 + 50
+print(whoami)
 
-print(x)
+if("hello" == "nothello") {
+    print("here")
+} else {
+    print "not here"
+}
+
+a = "outer scope"
+b = "global b"
+print a
+{
+    \inner scope should have access to outer scope\
+    b = "inner scope"
+    c = "inner scope 2"
+    print("should be outer scope")
+    print(a)
+    print("should be inner scope")
+    print(b)
+    print("should be inner scope 2")
+    print(c)
+}
+
+\this shoud print inner scope.\ 
+print(b)
+
+\Should throw error bc it's defined inner scope\
+\print(c)\
+
+
 
 \comments are ignored
 all comments are multline!

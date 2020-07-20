@@ -85,7 +85,7 @@ class Scanner:
                         self.line = self.line + 1
                 self.getNextChar()
                 continue
-                
+
             else:
                 # handles double lexemes.
                 if(char == "!" or char == "<" or char == ">" or char == "="):
