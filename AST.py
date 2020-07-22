@@ -82,6 +82,7 @@ class AST:
             if(not self.match("newline") and not self.isAtEnd()):
                 print("Error:\tExpected end of line")
         
+        self.getNextChar()
         # resets variable scope to the parent.
         self.environment = childenvironment.enclosing
         return Block(blockstmts) 
@@ -112,15 +113,25 @@ class AST:
         if(self.match("leftparenthesis")):
             self.getNextChar()
             condition = self.expression()
-
-            self.getNextChar()
+            
             if(not self.match("rightparenthesis")):
                 print("unclosed parenthesis")
 
-            thenbranch = self.line()
             self.getNextChar()
+            self.ignoreNewLines()
+            self.getNextChar()
+            thenbranch = self.line()
+
+            self.ignoreNewLines()
+            
+            # Hardcoded this because statements must end at newline character.
+            if(self.peek().type == "else"):
+                self.getNextChar()
+
             elsebranch = None
             if(self.match("else")):
+                self.getNextChar()
+                self.ignoreNewLines()
                 self.getNextChar()
                 elsebranch = self.line()
 
@@ -227,11 +238,14 @@ class AST:
     def peek(self):
         return self.tokens[self.pos]
 
+    def ignoreNewLines(self):
+        while(self.tokens[self.pos].type == "newline"):
+            self.getNextChar()
+
     # gets the next character while iterating the cursor.
     def getNextChar(self):
         self.pos = self.pos + 1
         self.cursor = self.tokens[self.pos - 1]
-        print("ingetnextchar " + self.cursor.toString())
 
     def isAtEnd(self):
         if(self.cursor.type == "EOF"):

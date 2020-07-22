@@ -1,11 +1,11 @@
 \Welcome to Cacti\
 print(whoami)
 
-if("hello" == "nothello") {
-    print("here")
-} else {
-    print "not here"
-}
+x = 2
+
+if(x == 2) 
+print("true")
+
 
 a = "outer scope"
 b = "global b"
