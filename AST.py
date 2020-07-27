@@ -59,6 +59,8 @@ class AST:
             stmt = self.block()
         elif(self.match("if")):
             stmt = self.ifStatement()
+        elif(self.match("while")):
+            stmt = self.whileStatement()
         else:
             stmt = self.statement()
         return stmt
@@ -103,8 +105,28 @@ class AST:
             self.getNextChar()
             return Print(self.expression())
         else:
-            # self.getNextChar()
             return self.expression()
+
+    def whileStatement(self):
+        self.getNextChar()
+
+        if(self.match("leftparenthesis")):
+            self.getNextChar()
+            condition = self.expression()
+
+            if(not self.match("rightparenthesis")):
+                print("missing right parenthesis")
+
+            self.getNextChar()
+
+            if(self.match("newline")):
+                self.getNextChar()
+            
+            body = self.line()
+
+            return While(condition, body)
+        else:
+            print("missing leftparenthesis")
 
     def ifStatement(self):
         self.getNextChar()
@@ -125,14 +147,16 @@ class AST:
             self.ignoreNewLines()
             
             # Hardcoded this because statements must end at newline character.
+            # TODO edit the grammer here. Can be coded way cleaner. 
             if(self.peek().type == "else"):
                 self.getNextChar()
 
             elsebranch = None
             if(self.match("else")):
                 self.getNextChar()
-                self.ignoreNewLines()
-                self.getNextChar()
+                
+                if(self.match("newline")):
+                    self.getNextChar()
                 elsebranch = self.line()
 
             return IfStatement(condition, thenbranch, elsebranch)
@@ -168,7 +192,7 @@ class AST:
 
     def addition(self):
         multi = self.multiplication()
-        while(self.match("minus", "plus")):
+        while(self.match("minus", "plus", "or")):
             operator = self.cursor.lexeme
             self.getNextChar()
             right = self.multiplication()
@@ -179,7 +203,7 @@ class AST:
     def multiplication(self):
         un = self.unary()
 
-        while(self.match("divide", "multiply")):
+        while(self.match("divide", "multiply", "and")):
             operator = self.cursor.lexeme
             self.getNextChar()
             right = self.unary()

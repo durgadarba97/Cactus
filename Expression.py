@@ -10,7 +10,12 @@ class Literal(Expression):
         self.literal = l
 
     def evaluate(self):
-        return self.literal
+        if(self.literal == "true"):
+            return True
+        elif(self.literal == "false"):
+            return False
+        else:
+            return self.literal
 
     def toString(self):
         if(self.literal == "\n"):
@@ -73,7 +78,11 @@ class Binary(Expression):
         elif(self.operator == "=="):
             return (self.expLeft.evaluate() == self.expRight.evaluate())
         elif(self.operator == "!="):
-            return (self.expLeft.evaluate() != self.expRight.evaluate())        
+            return (self.expLeft.evaluate() != self.expRight.evaluate()) 
+        elif(self.operator == "or"):
+            return (self.expLeft.evaluate() or self.expRight.evaluate())
+        elif(self.operator == "and"):
+            return (self.expLeft.evaluate() and self.expRight.evaluate())          
 
     def toString(self):
         if(self.expLeft != None and self.operator != None and self.expRight != None):

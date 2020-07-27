@@ -4,12 +4,3 @@ Error:	Expected end of line
 
 AST result==========>
 Hello, welcome to Cactus!
-true
-outer scope
-should be outer scope
-outer scope
-should be inner scope
-inner scope
-should be inner scope 2
-inner scope 2
-inner scope

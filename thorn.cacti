@@ -1,11 +1,10 @@
 \Welcome to Cacti\
 print(whoami)
 
-x = 2
+x = 5
 
-if(x == 2) 
-print("true")
-
+x = x - 1
+print(x)
 
 a = "outer scope"
 b = "global b"

@@ -45,3 +45,12 @@ class IfStatement(Statement):
             self.thenbranch.evaluate()
         elif(self.elsebranch != None):
             self.elsebranch.evaluate()
+
+class While(Statement):
+    def __init__(self, cond, s):
+        self.condition = cond
+        self.statements = s
+
+    def evaluate(self):
+        while(self.condition.evaluate()):
+            self.statements.evaluate()
