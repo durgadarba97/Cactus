@@ -10,7 +10,7 @@ class Declaration(Statement):
         self.state = s
 
     def evaluate(self):
-        self.state.setEnv(self.name, self.value)
+        self.state.setEnv(self.name, self.value.evaluate())
 
     def toString(self):
         print("Declaration( " + self.name + str(self.value) + ")")
@@ -54,3 +54,19 @@ class While(Statement):
     def evaluate(self):
         while(self.condition.evaluate()):
             self.statements.evaluate()
+
+class For(Statement):
+    def __init__(self, i, cond, inc, s):
+        self.initial = i
+        self.condition = cond
+        self.increment = inc 
+        self.statements = s
+
+    # I just implemented for loops bc I couldn't figure out how to do it with the way 
+    # python does for loops. I don't really like the for-each loop that python uses 
+    # so the syntax is different.
+    def evaluate(self):
+        self.initial.evaluate()
+        while(self.condition.evaluate()):
+            self.statements.evaluate()
+            self.increment.evaluate()

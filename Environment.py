@@ -1,6 +1,6 @@
 class Environment:
-    def __init__(self, enclose = None):  
-        self.variables = {"hello": "world"}
+    def __init__(self, vars = {}, enclose = None):  
+        self.variables = vars
         self.enclosing = enclose
     
     # recursively checks if variable exists. Done like this for variable scoping
@@ -23,6 +23,7 @@ class Environment:
             found.variables[name] = value
         else:
             self.variables[name] = value
+
 
         # TODO return error
 

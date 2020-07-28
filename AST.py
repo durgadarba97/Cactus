@@ -21,7 +21,7 @@ class AST:
         self.getNextChar()
         self.ast = []
 
-        self.ast.append(Declaration(self.environment, "whoami", Literal("Hello, welcome to Cactus!")))
+        # self.ast.append(Declaration(self.environment, "whoami", Literal("Hello, welcome to Cactus!")))
 
         self.program()
         
@@ -60,7 +60,9 @@ class AST:
         elif(self.match("if")):
             stmt = self.ifStatement()
         elif(self.match("while")):
-            stmt = self.whileStatement()
+            stmt = self.whileloop()
+        elif(self.match("for")):
+            stmt = self.forloop()
         else:
             stmt = self.statement()
         return stmt
@@ -70,7 +72,7 @@ class AST:
         blockstmts = []
 
         # Creates variable scope by saying that the block is the child of the parent block. 
-        childenvironment = Environment(self.environment)
+        childenvironment = Environment(enclose = self.environment)
         self.environment = childenvironment
         while(not self.isAtEnd() and not self.match("rightbrace")):
 
@@ -94,7 +96,8 @@ class AST:
         self.getNextChar()
         if(self.match("equal")):
             self.getNextChar()
-            return Declaration(self.environment, varname, self.expression())
+            decl = Declaration(self.environment, varname, self.expression())
+            return decl
 
 
         
@@ -107,7 +110,7 @@ class AST:
         else:
             return self.expression()
 
-    def whileStatement(self):
+    def whileloop(self):
         self.getNextChar()
 
         if(self.match("leftparenthesis")):
@@ -127,6 +130,38 @@ class AST:
             return While(condition, body)
         else:
             print("missing leftparenthesis")
+
+    # TODO make sure none of these are null values. 
+    # The book gives people the freedom to not include some of them
+    # But I feel like that's too much syntactic sugar.
+    def forloop(self):
+        self.getNextChar()
+
+        if(self.match("leftparenthesis")):
+            self.getNextChar()
+            initial = self.declaration()
+
+            if(not self.match("comma")):
+                print("missing comma seperator")
+            self.getNextChar()
+
+            condition = self.expression()
+            if(not self.match("comma")):
+                print("missing comma seperator")
+            self.getNextChar()
+
+            increment = self.declaration()
+            if(not self.match("rightparenthesis")):
+                print("missing right parenthesis")
+            
+            self.getNextChar()
+            if(self.match("newline")):
+                self.getNextChar()
+
+            statements = self.line()
+            return For(initial, condition, increment, statements)
+        else:
+            print("missing left parenthesis")
 
     def ifStatement(self):
         self.getNextChar()
@@ -224,8 +259,11 @@ class AST:
         return self.primary()
     
     def primary(self):
-        if(self.match("false", "true", "null", "int", "string")):   
-            lit = Literal(self.cursor.lexeme)
+        if(self.match("false", "true", "null", "int", "double", "string")): 
+            typ = self.cursor.type
+            lex = self.cursor.lexeme
+
+            lit = Literal(lex)
             self.getNextChar()
             return lit
         
@@ -242,6 +280,7 @@ class AST:
 
         if(self.match("identifier")):
             var = self.cursor.lexeme
+            # Creates a copy of the current environment
             self.getNextChar()
             return Variable(self.environment, var)
 

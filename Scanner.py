@@ -65,8 +65,10 @@ class Scanner:
                     char = char + nextchar
 
                 if(char.__contains__(".")):
+                    char = float(char)
                     tokentype = "double"
                 else:
+                    char = int(char)
                     tokentype = "int"
                 
                 isliteral = True

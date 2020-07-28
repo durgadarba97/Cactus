@@ -1,42 +1,5 @@
-\Welcome to Cacti\
-print(whoami)
-
-x = 5
-
-x = x - 1
-print(x)
-
-a = "outer scope"
-b = "global b"
-print a
+i = "hello"
+for(i = 0, i < 5, i = i + 1) 
 {
-    \inner scope should have access to outer scope\
-    b = "inner scope"
-    c = "inner scope 2"
-    print("should be outer scope")
-    print(a)
-    print("should be inner scope")
-    print(b)
-    print("should be inner scope 2")
-    print(c)
+    print(i)
 }
-
-\this shoud print inner scope.\ 
-print(b)
-
-\Should throw error bc it's defined inner scope\
-\print(c)\
-
-
-
-\comments are ignored
-all comments are multline!
-
-var x = "Hello World!"
-print(x)
-
-testing munch
-orchid
-or chid
-and
-andesite\

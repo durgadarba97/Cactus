@@ -90,10 +90,11 @@ class Binary(Expression):
         else:
             print("HERE")
 
-class Variable(Expression):
+# the state for a variable should just be it at a given point. 
+class Variable(Environment):
     def __init__(self, s, n):
         self.name = n
         self.state = s
     
     def evaluate(self):
-        return self.state.getEnv(self.name).evaluate()
+        return self.state.getEnv(self.name)
