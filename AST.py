@@ -53,8 +53,13 @@ class AST:
                 print("Error:\tExpected end of line")
 
     def line(self):
+        # If it's an identifier, it could either be a variable declaration, function declaration, or just stating a primary.
         if(self.match("identifier")):
-            stmt = self.declaration() 
+            if(self.peek("equal")):
+                stmt = self.declaration()
+            else:
+                stmt = self.functionCall()
+
         elif(self.match("leftbrace")):
             stmt = self.block()
         elif(self.match("if")):
@@ -98,6 +103,8 @@ class AST:
             self.getNextChar()
             decl = Declaration(self.environment, varname, self.expression())
             return decl
+        else:
+            print("ERROR expected \"=\" after variable declaration")
 
 
         
@@ -183,7 +190,7 @@ class AST:
             
             # Hardcoded this because statements must end at newline character.
             # TODO edit the grammer here. Can be coded way cleaner. 
-            if(self.peek().type == "else"):
+            if(self.peek("else")):
                 self.getNextChar()
 
             elsebranch = None
@@ -225,6 +232,7 @@ class AST:
         
         return addition
 
+    # included or in addition because in probablity or usually means add
     def addition(self):
         multi = self.multiplication()
         while(self.match("minus", "plus", "or")):
@@ -235,6 +243,7 @@ class AST:
 
         return multi
     
+    # included and in multiplication because in probablity and usually means multiply
     def multiplication(self):
         un = self.unary()
 
@@ -256,7 +265,35 @@ class AST:
             right = self.unary()                 
             return Unary(operator, right)
 
-        return self.primary()
+        return self.functionCall()
+
+    def functionCall(self):
+        name = self.primary()
+        
+        if(self.match("leftparenthesis")):
+            self.getNextChar()
+            argumentcount = 0
+            arguments = []
+            while(not self.match("rightparenthesis")):
+                # probably could've done this with a do while loop. this works for now.
+                self.getNextChar()
+                arguments.append(self.expression())
+                self.getNextChar()
+
+                while(self.match("comma") or len(arguments) <= 255):
+                    self.getNextChar()
+                    arguments.append(self.expression())
+
+            print("HERE")
+
+            # TODO Kind of an inefficient way to do this, but I can change this later. 
+            self.getNextChar()
+            if(len(arguments) and not self.match("rightparenthesis")):
+                print("ERROR EXPECTED \")\"")
+
+        else:
+            return name
+
     
     def primary(self):
         if(self.match("false", "true", "null", "int", "double", "string")): 
@@ -298,8 +335,11 @@ class AST:
         
         return False
 
-    def peek(self):
-        return self.tokens[self.pos]
+    def peek(self, arg):
+        if(arg == self.tokens[self.pos].type):
+            return True
+        else:
+            return False
 
     def ignoreNewLines(self):
         while(self.tokens[self.pos].type == "newline"):

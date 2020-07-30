@@ -1,5 +1,2 @@
-i = "hello"
-for(i = 0, i < 5, i = i + 1) 
-{
-    print(i)
-}
+
+somefunction(6, 5, 4,3 , 2 , 1)
