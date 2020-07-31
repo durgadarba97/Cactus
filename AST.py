@@ -272,25 +272,21 @@ class AST:
         
         if(self.match("leftparenthesis")):
             self.getNextChar()
-            argumentcount = 0
             arguments = []
             while(not self.match("rightparenthesis")):
                 # probably could've done this with a do while loop. this works for now.
-                self.getNextChar()
                 arguments.append(self.expression())
-                self.getNextChar()
 
-                while(self.match("comma") or len(arguments) <= 255):
+                while(self.match("comma") and len(arguments) <= 255):
                     self.getNextChar()
                     arguments.append(self.expression())
 
-            print("HERE")
 
             # TODO Kind of an inefficient way to do this, but I can change this later. 
-            self.getNextChar()
             if(len(arguments) and not self.match("rightparenthesis")):
                 print("ERROR EXPECTED \")\"")
-
+            else:
+                self.getNextChar()
         else:
             return name
 
@@ -304,6 +300,7 @@ class AST:
             self.getNextChar()
             return lit
         
+        # TODO the book makes it call another expression, but I think it only really needs to be a unary.
         if(self.match("leftparenthesis")):
             self.getNextChar()
             exp = self.expression()
