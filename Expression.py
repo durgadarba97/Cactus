@@ -98,3 +98,25 @@ class Variable(Environment):
     
     def evaluate(self):
         return self.state.getEnv(self.name)
+
+
+class FunctionCall(Environment):
+    def __init__(self, n, params, s):
+        self.name = n
+        self.parameters = params
+        self.state = s
+    
+    def evaluate(self):
+        decl = self.state.getEnv(self.name)
+        
+        # TODO check to make sure decl is a Function type.
+
+        # check arity of function.
+        if(len(decl.parameters) != len(self.parameters)):
+            print("ERROR expected number of arguements doesn't match ")
+
+        # initialize the parameters
+        for i in range(len(self.parameters)):
+            decl.state.setEnv(decl.parameters[i].name, self.parameters[i].evaluate())
+
+        decl.evaluate()

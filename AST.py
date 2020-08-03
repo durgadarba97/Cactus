@@ -268,6 +268,7 @@ class AST:
         return self.functionCall()
 
     def functionCall(self):
+        # put the identifier call at the end to avoid the bs name.name
         name = self.primary()
         
         if(self.match("leftparenthesis")):
@@ -286,7 +287,24 @@ class AST:
             if(len(arguments) and not self.match("rightparenthesis")):
                 print("ERROR EXPECTED \")\"")
             else:
+
+                # check if it's a function call or if it's a function declaration. 
+                # idk if this is a good way to do it. the syntax might be confusing and too permissive,
+                # but it's a fun thing to check out. Maybe rewrite tho.
                 self.getNextChar()
+                if(self.match("newline")):
+                    if(self.peek("leftbrace")):
+                        self.getNextChar()
+
+                # move the primary call to the end to avoid the bs name.name TODO
+                if(self.match("leftbrace")):
+                    body = self.line()
+                    return FunctionDeclaration(name.name, arguments, body, self.environment)
+                
+                else:
+                    print("return function call")
+                    return FunctionCall(name.name, arguments, self.environment)
+
         else:
             return name
 

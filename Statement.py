@@ -32,6 +32,26 @@ class Block(Statement):
     def evaluate(self):
         for i in self.statements:
             i.evaluate()
+
+# wrapper to declare functions. 
+class FunctionDeclaration(Statement):
+    def __init__(self, n, p, b, s):
+        self.name = n
+        self.state = s
+        self.function = Function(p, b, s)
+
+    def evaluate(self):
+        self.state.setEnv(self.name, self.function)
+
+# works similar to primitive and block but handles Function types.
+class Function(Statement):
+    def __init__(self,p, b, s):
+        self.parameters = p
+        self.block = b
+        self.state = s
+    
+    def evaluate(self):
+        self.block.evaluate()
         
 
 class IfStatement(Statement):

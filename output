@@ -1,6 +1,6 @@
 Success!
 AST Construction==========>
-HERE
-ERROR EXPECTED ")"
+Error:	Expected end of line
 
 AST result==========>
+2
