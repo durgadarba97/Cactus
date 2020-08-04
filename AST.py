@@ -182,8 +182,10 @@ class AST:
                 print("unclosed parenthesis")
 
             self.getNextChar()
-            self.ignoreNewLines()
-            self.getNextChar()
+            
+            if(self.match("newline")):
+                self.getNextChar()
+                
             thenbranch = self.line()
 
             self.ignoreNewLines()

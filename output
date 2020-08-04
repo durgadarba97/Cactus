@@ -1,6 +1,11 @@
 Success!
 AST Construction==========>
+return function call
 Error:	Expected end of line
+Error:	Expected end of line
+return function call
 
 AST result==========>
-2
+1
+1
+1
