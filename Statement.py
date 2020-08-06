@@ -1,16 +1,17 @@
-from Environment import *
+from Environment import state
+
 class Statement():
     pass
     
         
 class Declaration(Statement):
-    def __init__(self, s, n, val):
+    def __init__(self, n, val):
         self.value = val
         self.name = n
-        self.state = s
+        # self.state = s
 
     def evaluate(self):
-        self.state.setEnv(self.name, self.value.evaluate())
+        state.environment.setEnv(self.name, self.value.evaluate())
 
     def toString(self):
         print("Declaration( " + self.name + str(self.value) + ")")
@@ -26,35 +27,36 @@ class Print(Statement):
         print("Print(" + self.value.toString() + ")")
 
 class Block(Statement):
-    def __init__(self, s, st):
+    def __init__(self, s):
         self.statements = s
-        self.state = st
+        # self.state = st
     
     def evaluate(self):
+        state.enclose()
+
         for i in self.statements:
             i.evaluate()
+        
+        state.close()
 
 # I feel like I should rewrite this. 
 
 # wrapper to declare functions. 
 class FunctionDeclaration(Statement):
-    def __init__(self, n, p, b, s):
+    def __init__(self, n, p, b):
         self.name = n
-        self.state = s
         self.function = Function(p, b)
 
     def evaluate(self):
-        self.state.setEnv(self.name, self.function)
+        state.environment.setEnv(self.name, self.function)
 
 # works similar to primitive and block but handles Function types.
 class Function(Statement):
     def __init__(self,p, b):
         self.parameters = p
         self.block = b
-        self.state = None
     
     def evaluate(self):
-        self.block.state = self.state
         self.block.evaluate()
         
 

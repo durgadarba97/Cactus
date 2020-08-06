@@ -25,8 +25,6 @@ class Environment:
         #     self.variables[name] = value
 
         self.variables[name] = value
-        print(self.getEnv(name))
-        print("here")
         # TODO return error
 
     #  recursive method to find which scoping level the variable exists.
@@ -39,4 +37,15 @@ class Environment:
         else:
             return False
 
-environment = Environment()
+# One state to manage the storing of variables, objects (when I get there), and functions
+class State:
+    def __init__(self):
+        self.environment = Environment()
+
+    def enclose(self):
+        self.environment = Environment(self.environment)
+
+    def close(self):
+        self.environment = self.environment.enclosing
+
+state = State()

@@ -5,7 +5,7 @@
 from TokenType import getType
 from Expression import *
 from Statement import *
-from Environment import *
+from Environment import state
 
 # Builds the abstract syntax tree using recursive descent.
 # TODO newline characters break the code.
@@ -15,7 +15,7 @@ class AST:
         self.tokens = t
         self.pos = 0
         self.cursor = None
-        self.environment = Environment()
+        # self.environment = Environment()
         
         # There's an issue with the way things are being parsed. Starts at position 1 instead of 0
         self.getNextChar()
@@ -77,8 +77,8 @@ class AST:
         blockstmts = []
 
         # Creates variable scope by saying that the block is the child of the parent block. 
-        childenvironment = Environment(enclose = self.environment)
-        self.environment = childenvironment
+        # childenvironment = Environment(enclose = self.environment)
+        # self.environment = childenvironment
         while(not self.isAtEnd() and not self.match("rightbrace")):
 
             self.getNextChar()
@@ -93,15 +93,16 @@ class AST:
         
         self.getNextChar()
         # resets variable scope to the parent.
-        self.environment = childenvironment.enclosing
-        return Block(blockstmts, childenvironment) 
+        # self.environment = childenvironment.enclosing
+        return Block(blockstmts) 
 
     def declaration(self):
         varname = self.cursor.lexeme
         self.getNextChar()
         if(self.match("equal")):
             self.getNextChar()
-            decl = Declaration(self.environment, varname, self.expression())
+            # decl = Declaration(self.environment, varname, self.expression())
+            decl = Declaration(varname, self.expression())
             return decl
         else:
             print("ERROR expected \"=\" after variable declaration")
@@ -301,12 +302,12 @@ class AST:
                 # move the primary call to the end to avoid the bs name.name TODO
                 if(self.match("leftbrace")):
                     body = self.line()
-                    return FunctionDeclaration(name.name, arguments, body, self.environment)
+                    return FunctionDeclaration(name.name, arguments, body)
                 
                 else:
                     print("return function call")
 
-                    return FunctionCall(name.name, arguments, self.environment)
+                    return FunctionCall(name.name, arguments)
 
         else:
             return name
@@ -337,7 +338,7 @@ class AST:
             var = self.cursor.lexeme
             # Creates a copy of the current environment
             self.getNextChar()
-            return Variable(self.environment, var)
+            return Variable(var)
 
         
                 

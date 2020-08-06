@@ -1,4 +1,4 @@
-from Environment import *
+from Environment import state
 class Expression():
     def __init__(self):
         # an expression can be a literal, unary, binary, or grouping, declaration, 
@@ -92,23 +92,22 @@ class Binary(Expression):
 
 # the state for a variable should just be it at a given point. 
 class Variable(Expression):
-    def __init__(self, s, n):
+    def __init__(self, n):
         self.name = n
-        self.state = s
+        # self.state = s
     
     def evaluate(self):
-        return self.state.getEnv(self.name)
+        return state.environment.getEnv(self.name)
 
 
 class FunctionCall(Expression):
-    def __init__(self, n, params, s):
+    def __init__(self, n, params):
         self.name = n
         self.parameters = params
-        self.state = s
     
     def evaluate(self):
-        decl = self.state.getEnv(self.name)
-        decl.state = Environment(enclose = self.state)
+        decl = state.environment.getEnv(self.name)
+        state.enclose()
 
         # TODO check to make sure decl is a Function type.
 
@@ -118,6 +117,7 @@ class FunctionCall(Expression):
 
         # initialize the parameters
         for i in range(len(self.parameters)):
-            decl.state.setEnv(decl.parameters[i].name, self.parameters[i].evaluate())
+            state.environment.setEnv(decl.parameters[i].name, self.parameters[i].evaluate())
 
         decl.evaluate()
+        state.close()
