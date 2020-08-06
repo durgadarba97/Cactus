@@ -91,7 +91,7 @@ class Binary(Expression):
             print("HERE")
 
 # the state for a variable should just be it at a given point. 
-class Variable(Environment):
+class Variable(Expression):
     def __init__(self, s, n):
         self.name = n
         self.state = s
@@ -100,7 +100,7 @@ class Variable(Environment):
         return self.state.getEnv(self.name)
 
 
-class FunctionCall(Environment):
+class FunctionCall(Expression):
     def __init__(self, n, params, s):
         self.name = n
         self.parameters = params
@@ -108,7 +108,8 @@ class FunctionCall(Environment):
     
     def evaluate(self):
         decl = self.state.getEnv(self.name)
-        
+        decl.state = Environment(enclose = self.state)
+
         # TODO check to make sure decl is a Function type.
 
         # check arity of function.

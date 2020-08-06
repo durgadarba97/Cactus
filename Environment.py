@@ -1,6 +1,6 @@
 class Environment:
-    def __init__(self, vars = {}, enclose = None):  
-        self.variables = vars
+    def __init__(self, enclose = None):  
+        self.variables = {}
         self.enclosing = enclose
     
     # recursively checks if variable exists. Done like this for variable scoping
@@ -17,14 +17,16 @@ class Environment:
     #  environment has the variable and set it at that level. If not, creates a new variable at child.
     #  Done like this for variable scoping.s
     def setEnv(self, name, value):
-        found = self.find(name)
+        # found = self.find(name)
 
-        if(found):
-            found.variables[name] = value
-        else:
-            self.variables[name] = value
+        # if(found):
+        #     found.variables[name] = value
+        # else:
+        #     self.variables[name] = value
 
-
+        self.variables[name] = value
+        print(self.getEnv(name))
+        print("here")
         # TODO return error
 
     #  recursive method to find which scoping level the variable exists.
@@ -36,3 +38,5 @@ class Environment:
             return self.enclosing.find(name)
         else:
             return False
+
+environment = Environment()

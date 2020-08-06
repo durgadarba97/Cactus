@@ -94,7 +94,7 @@ class AST:
         self.getNextChar()
         # resets variable scope to the parent.
         self.environment = childenvironment.enclosing
-        return Block(blockstmts) 
+        return Block(blockstmts, childenvironment) 
 
     def declaration(self):
         varname = self.cursor.lexeme
@@ -185,7 +185,7 @@ class AST:
             
             if(self.match("newline")):
                 self.getNextChar()
-                
+
             thenbranch = self.line()
 
             self.ignoreNewLines()
@@ -305,6 +305,7 @@ class AST:
                 
                 else:
                     print("return function call")
+
                     return FunctionCall(name.name, arguments, self.environment)
 
         else:
