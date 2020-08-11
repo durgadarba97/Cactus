@@ -12,7 +12,7 @@ class Return(Statement):
 
 class ReturnException(Exception):
     def __init__(self, val = None):
-        super(ReturnException, self).__init__(val)
+        super(ReturnException, self).__init__(val.evaluate())
 
         
 class Declaration(Statement):
@@ -46,7 +46,11 @@ class Block(Statement):
         state.enclose()
 
         for i in self.statements:
-            i.evaluate()
+            try:
+                i.evaluate()
+            except ReturnException as e:
+                state.close()
+                raise
 
         
         state.close()

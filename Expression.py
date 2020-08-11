@@ -123,5 +123,6 @@ class FunctionCall(Expression):
         try:
             decl.evaluate()
         except ReturnException as e:
-            return e.args[0].evaluate()
+            state.close()
+            return e.args[0]
         state.close()
