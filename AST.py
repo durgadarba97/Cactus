@@ -59,7 +59,8 @@ class AST:
                 stmt = self.declaration()
             else:
                 stmt = self.functionCall()
-
+        elif(self.match("return")):
+            stmt = self.returnStatement()
         elif(self.match("leftbrace")):
             stmt = self.block()
         elif(self.match("if")):
@@ -208,6 +209,15 @@ class AST:
         
         else:
             print("if statement must start a condition using left parenthesis")
+
+    def returnStatement(self):
+        self.getNextChar()
+
+        if(self.match("newline")):
+            self.getNextChar()
+            return Return()
+        else:
+            return Return(self.expression())
 
     # These set of equations build the ast stack. 
     def expression(self):

@@ -1,4 +1,5 @@
 from Environment import state
+from Statement import ReturnException
 class Expression():
     def __init__(self):
         # an expression can be a literal, unary, binary, or grouping, declaration, 
@@ -118,6 +119,9 @@ class FunctionCall(Expression):
         # initialize the parameters
         for i in range(len(self.parameters)):
             state.environment.setEnv(decl.parameters[i].name, self.parameters[i].evaluate())
-
-        decl.evaluate()
+        
+        try:
+            decl.evaluate()
+        except ReturnException as e:
+            return e.args[0].evaluate()
         state.close()

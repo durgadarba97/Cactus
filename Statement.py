@@ -3,6 +3,17 @@ from Environment import state
 class Statement():
     pass
     
+class Return(Statement):
+    def __init__(self, val = None):
+        self.value = val
+    
+    def evaluate(self):
+        raise ReturnException(self.value)
+
+class ReturnException(Exception):
+    def __init__(self, val = None):
+        super(ReturnException, self).__init__(val)
+
         
 class Declaration(Statement):
     def __init__(self, n, val):
@@ -36,6 +47,7 @@ class Block(Statement):
 
         for i in self.statements:
             i.evaluate()
+
         
         state.close()
 

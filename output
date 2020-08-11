@@ -1,13 +1,7 @@
 Success!
 AST Construction==========>
-return function call
-Error:	Expected end of line
 Error:	Expected end of line
 return function call
 
 AST result==========>
-0
-0
-0
-0
-0
+5
