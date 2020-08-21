@@ -6,6 +6,7 @@ from TokenType import getType
 from Expression import *
 from Statement import *
 from Environment import state
+from Error import *
 
 # Builds the abstract syntax tree using recursive descent.
 # TODO newline characters break the code.
@@ -28,7 +29,13 @@ class AST:
         # evaluates the AST
         print("\nAST result==========>")
         for i in self.ast:
-            eval = i.evaluate()
+
+            try:
+                eval = i.evaluate()
+            except Error as e:
+                err = e.args[0]
+                err.throwError()
+
 
         # To String is broken for some reason. 
         # self.ast.toString()

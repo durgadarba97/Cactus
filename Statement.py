@@ -45,6 +45,9 @@ class Block(Statement):
     def evaluate(self):
         state.enclose()
 
+        # return statement throws an exception that's handeled here. and raises it again
+        # so it unravels properly to the function call. This is so that it handles variable
+        # scoping properly.
         for i in self.statements:
             try:
                 i.evaluate()
@@ -56,7 +59,6 @@ class Block(Statement):
         state.close()
 
 # I feel like I should rewrite this. 
-
 # wrapper to declare functions. 
 class FunctionDeclaration(Statement):
     def __init__(self, n, p, b):

@@ -14,3 +14,9 @@ class Error:
     def throwError(self):
         print("ERROR\t:\t" + self.err + "\nOccured at line\t:\t" + str(self.line))
         sys.exit(1)
+
+class UndeclaredVariable(Error):
+    def __init__(self):
+        pass
+
+
