@@ -1,25 +1,51 @@
 
+x = 5
+while( x > 1) {
+    print x
+    x = x - 1
+}
+print x
+
+if(x == 1) {
+    print("start fibonnaci =====>")
+}
+
+
+fibonnaci(f) {
+    if (f <= 1) {
+        return f
+    }
+    ret = fibonnaci(f - 1) + fibonnaci(f - 2)
+    return ret
+}
+
+for(i = 0, i < 5, i = i+1) {
+    print fibonnaci(i)
+}
+
+print "count=====>"
+count(n) {
+    if(n > 0) {
+        count(n - 1)
+    }
+    print(n)
+    return n
+}
+
+count(3)
+
+
+\
 add(a, b) {
     return a + b
 }
 
 a = add(5, 6)
 print(a)
-
-
 \
-count(n) {
-    if(n > 0) {
-        n = count(n - 1)
-    }
 
-    return n
-}
 
-x = count(3)
 
-print(x)
-\
 \
 n = 2
 

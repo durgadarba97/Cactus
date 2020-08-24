@@ -1,3 +1,5 @@
+from Error import *
+
 class Environment:
     def __init__(self, enclose = None):  
         self.variables = {}
@@ -10,8 +12,9 @@ class Environment:
             return self.variables[name]
         elif(self.enclosing != None):
             return self.enclosing.getEnv(name)
-
-        # TODO return error
+        # return error TODO
+        else:
+            raise UndeclaredVariableException()
     
     #  Because var initialization and redeclaration are the same, this recursively check if parent
     #  environment has the variable and set it at that level. If not, creates a new variable at child.
@@ -19,12 +22,14 @@ class Environment:
     def setEnv(self, name, value):
         # found = self.find(name)
 
-        # if(found):
+        # if(found != False):
         #     found.variables[name] = value
         # else:
         #     self.variables[name] = value
-
+        
         self.variables[name] = value
+
+        return True
         # TODO return error
 
     #  recursive method to find which scoping level the variable exists.
@@ -46,6 +51,10 @@ class State:
         self.environment = Environment(self.environment)
 
     def close(self):
+        enclosing = self.environment.enclosing
+        for i in self.environment.variables:
+            if(i in enclosing.variables):
+                enclosing.setEnv(i, self.environment.getEnv(i))
         self.environment = self.environment.enclosing
 
 state = State()

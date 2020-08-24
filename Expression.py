@@ -1,5 +1,6 @@
 from Environment import state
 from Statement import ReturnException
+from Error import *
 class Expression():
     def __init__(self):
         # an expression can be a literal, unary, binary, or grouping, declaration, 
@@ -93,28 +94,39 @@ class Binary(Expression):
 
 # the state for a variable should just be it at a given point. 
 class Variable(Expression):
-    def __init__(self, n):
+    def __init__(self, n, l):
         self.name = n
-        # self.state = s
+        self.line = l
     
     def evaluate(self):
-        return state.environment.getEnv(self.name)
+        try:
+            return state.environment.getEnv(self.name)
+        except UndeclaredVariableException as e:
+            e.setError("Use of variable, \"" + self.name + "\", before assignment", self.line)
+            raise
 
 
 class FunctionCall(Expression):
-    def __init__(self, n, params):
+    def __init__(self, n, params, l):
         self.name = n
         self.parameters = params
+        self.line = l
     
     def evaluate(self):
-        decl = state.environment.getEnv(self.name)
+        try:
+            decl = state.environment.getEnv(self.name)
+        except UndeclaredVariableException as e:
+            e.setError("Function called before assignment", self.line)
+            raise
         state.enclose()
 
         # TODO check to make sure decl is a Function type.
 
         # check arity of function.
         if(len(decl.parameters) != len(self.parameters)):
-            print("ERROR expected number of arguements doesn't match ")
+            e = ArgumentMismatchException()
+            e.setError("Incorrect number of arguments in function call", self.line)
+            raise e
 
         # initialize the parameters
         for i in range(len(self.parameters)):

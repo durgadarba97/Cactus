@@ -22,9 +22,9 @@ class AST:
         self.getNextChar()
         self.ast = []
 
-        # self.ast.append(Declaration(self.environment, "whoami", Literal("Hello, welcome to Cactus!")))
-
+        # self.ast.append(Declaration("whoami", Literal("Hello, welcome to Cactus!")))
         self.program()
+        
         
         # evaluates the AST
         print("\nAST result==========>")
@@ -33,8 +33,7 @@ class AST:
             try:
                 eval = i.evaluate()
             except Error as e:
-                err = e.args[0]
-                err.throwError()
+                e.throwError()
 
 
         # To String is broken for some reason. 
@@ -87,7 +86,7 @@ class AST:
         # Creates variable scope by saying that the block is the child of the parent block. 
         # childenvironment = Environment(enclose = self.environment)
         # self.environment = childenvironment
-        while(not self.isAtEnd() and not self.match("rightbrace")):
+        while(not self.match("rightbrace")):
 
             self.getNextChar()
             stmt = self.line()
@@ -96,13 +95,25 @@ class AST:
             if(stmt is not None):
                 blockstmts.append(stmt)
 
-            if(not self.match("newline") and not self.isAtEnd()):
-                print("Error:\tExpected end of line")
+            # TODO I can better do the logic here good for now though.
+            if(self.match("rightbrace")):
+                continue
+
+            if(self.isAtEnd()):
+                e = MissingCharacterException()
+                e.setError("Missing \"}\" before end of file", self.cursor.line)
+                e.throwError()
+
+            if(not self.match("newline")):
+                e = EndOfLineException()
+                e.setError("Expected end of line", self.cursor.line)
+                e.throwError()
+
         
         self.getNextChar()
         # resets variable scope to the parent.
         # self.environment = childenvironment.enclosing
-        return Block(blockstmts) 
+        return Block(blockstmts, self.cursor.line) 
 
     def declaration(self):
         varname = self.cursor.lexeme
@@ -110,10 +121,8 @@ class AST:
         if(self.match("equal")):
             self.getNextChar()
             # decl = Declaration(self.environment, varname, self.expression())
-            decl = Declaration(varname, self.expression())
+            decl = Declaration(varname, self.expression(), self.cursor.line)
             return decl
-        else:
-            print("ERROR expected \"=\" after variable declaration")
 
 
         
@@ -122,7 +131,7 @@ class AST:
     def statement(self):
         if(self.match("print")):
             self.getNextChar()
-            return Print(self.expression())
+            return Print(self.expression(), self.cursor.line)
         else:
             return self.expression()
 
@@ -134,7 +143,9 @@ class AST:
             condition = self.expression()
 
             if(not self.match("rightparenthesis")):
-                print("missing right parenthesis")
+                e = MissingCharacterException()
+                e.setError("Missing \")\" before end of file", self.cursor.line)
+                e.throwError()
 
             self.getNextChar()
 
@@ -143,9 +154,11 @@ class AST:
             
             body = self.line()
 
-            return While(condition, body)
+            return While(condition, body, self.cursor.line)
         else:
-            print("missing leftparenthesis")
+            e = MissingCharacterException()
+            e.setError("Missing \"(\" before end of file", self.cursor.line)
+            e.throwError()
 
     # TODO make sure none of these are null values. 
     # The book gives people the freedom to not include some of them
@@ -158,27 +171,36 @@ class AST:
             initial = self.declaration()
 
             if(not self.match("comma")):
-                print("missing comma seperator")
+                e = MissingCharacterException()
+                e.setError("Missing \",\" seperator in for loop", self.cursor.line)
+                e.throwError()
             self.getNextChar()
 
             condition = self.expression()
             if(not self.match("comma")):
-                print("missing comma seperator")
+                e = MissingCharacterException()
+                e.setError("Missing \",\" seperator in for loop", self.cursor.line)
+                e.throwError()
             self.getNextChar()
 
             increment = self.declaration()
             if(not self.match("rightparenthesis")):
-                print("missing right parenthesis")
+                e = MissingCharacterException()
+                e.setError("Missing \")\" in for loop", self.cursor.line)
+                e.throwError()
             
             self.getNextChar()
             if(self.match("newline")):
                 self.getNextChar()
 
             statements = self.line()
-            return For(initial, condition, increment, statements)
+            return For(initial, condition, increment, statements, self.cursor.line)
         else:
-            print("missing left parenthesis")
+            e = MissingCharacterException()
+            e.setError("Missing \",\" seperator", self.cursor.line)
+            e.throwError()
 
+# TODO conditions shouldn't be variable assignments
     def ifStatement(self):
         self.getNextChar()
         
@@ -188,7 +210,9 @@ class AST:
             condition = self.expression()
             
             if(not self.match("rightparenthesis")):
-                print("unclosed parenthesis")
+                e = MissingCharacterException()
+                e.setError("Missing \")\" in if statement", self.cursor.line)
+                e.throwError()
 
             self.getNextChar()
             
@@ -212,19 +236,21 @@ class AST:
                     self.getNextChar()
                 elsebranch = self.line()
 
-            return IfStatement(condition, thenbranch, elsebranch)
+            return IfStatement(condition, thenbranch, self.cursor.line, elsebranch)
         
         else:
-            print("if statement must start a condition using left parenthesis")
+            e = MissingCharacterException()
+            e.setError("Missing \"(\" in if statement", self.cursor.line)
+            e.throwError()
 
     def returnStatement(self):
         self.getNextChar()
 
         if(self.match("newline")):
             self.getNextChar()
-            return Return()
+            return Return(self.cursor.line)
         else:
-            return Return(self.expression())
+            return Return(self.cursor.line, self.expression())
 
     # These set of equations build the ast stack. 
     def expression(self):
@@ -305,7 +331,9 @@ class AST:
 
             # TODO Kind of an inefficient way to do this, but I can change this later. 
             if(len(arguments) and not self.match("rightparenthesis")):
-                print("ERROR EXPECTED \")\"")
+                e = MissingCharacterException()
+                e.setError("Missing \")\" in function ", self.cursor.line)
+                e.throwError()
             else:
 
                 # check if it's a function call or if it's a function declaration. 
@@ -319,12 +347,12 @@ class AST:
                 # move the primary call to the end to avoid the bs name.name TODO
                 if(self.match("leftbrace")):
                     body = self.line()
-                    return FunctionDeclaration(name.name, arguments, body)
+                    return FunctionDeclaration(name.name, arguments, body, self.cursor.line)
                 
                 else:
                     print("return function call")
 
-                    return FunctionCall(name.name, arguments)
+                    return FunctionCall(name.name, arguments, self.cursor.line)
 
         else:
             return name
@@ -348,14 +376,16 @@ class AST:
             if(self.cursor.type == "rightparenthesis"):
                 self.getNextChar()
             else:
-                print("Error:\topen parathensis error!")
+                e = MissingCharacterException()
+                e.setError("Missing \") \" ", self.cursor.line)
+                e.throwError()
             return Grouping(exp)
 
         if(self.match("identifier")):
             var = self.cursor.lexeme
             # Creates a copy of the current environment
             self.getNextChar()
-            return Variable(var)
+            return Variable(var, self.cursor.line)
 
         
                 

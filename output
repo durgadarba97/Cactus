@@ -1,7 +1,6 @@
 Success!
 AST Construction==========>
-Error:	Expected end of line
-return function call
 
 AST result==========>
-5
+ERROR	:	Use of variable before assignment
+Occured at line	:	1
