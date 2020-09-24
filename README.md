@@ -1,3 +1,3 @@
-# Cacti
-Making a programming language called cacti
+# Cactus
+Making a programming language called cactus
 (trying to anyways...)
