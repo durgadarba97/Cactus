@@ -16,10 +16,10 @@ class Cacti:
         #     self.throw("please import 1 file", 0)
         # else:
         #     self.scan(sys.argv[1])
-        self.scan("./thorn.cacti")
+        self.scan("./thorn.cactus")
         self.tokens = self.scanner.tokens
 
-        print("AST Construction==========>")
+        # print("AST Construction==========>")
         self.ast = AST(self.tokens)
         
     # Method to import and scan file
@@ -34,7 +34,7 @@ class Cacti:
         self.scanner = Scanner(self.text)
 
         self.file.close()
-        print("Success!")
+        # print("Success!")
     
     # helper method to deal with errors
     def throw(self, s, l):

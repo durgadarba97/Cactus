@@ -1,3 +1,2 @@
 # Cacti
-Making a programming language called cacti
-(trying to anyways...)
+Run "python3 ./Cactus" to run the input file: thorn the cactus.

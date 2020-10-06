@@ -17,6 +17,7 @@ class Scanner:
 
     # I feel like this should be recursive...
     def scan(self):
+        self.tokens.append(Token("newline", "\n", False, self.line))
         while(self.cursor < len(self.rawtext) - 1):
             self.start = self.cursor
             char = self.getNextChar()

@@ -27,7 +27,7 @@ class AST:
         
         
         # evaluates the AST
-        print("\nAST result==========>")
+        # print("\nAST result==========>")
         for i in self.ast:
 
             try:
@@ -350,8 +350,7 @@ class AST:
                     return FunctionDeclaration(name.name, arguments, body, self.cursor.line)
                 
                 else:
-                    print("return function call")
-
+                    # print("return function call")
                     return FunctionCall(name.name, arguments, self.cursor.line)
 
         else:
