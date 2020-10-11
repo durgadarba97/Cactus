@@ -1,2 +1,3 @@
 language = "python3"
-run = "python3 ./Cacti.py "
+run = "python3 ./Cactus.py"
+
