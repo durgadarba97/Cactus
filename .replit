@@ -1,2 +1,3 @@
-language = "python"
-run = "python3 ./Cactus"
+language = "python3"
+run = "python3 ./Cactus.py"
+
